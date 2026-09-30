@@ -22,10 +22,10 @@
     <div class="boot-menu" id="bootMenu" hidden>
       <p class="boot-id" id="bootId"></p>
       <div class="bm-grid">
-        <button class="bm-item" type="button" data-go="0"><b>01</b><span><strong>开始部署</strong><em>DEPLOY</em></span><i>►</i></button>
-        <button class="bm-item" type="button" data-go="2"><b>02</b><span><strong>装备检视</strong><em>INSPECT LOADOUT</em></span><i>►</i></button>
-        <button class="bm-item" type="button" data-go="3"><b>03</b><span><strong>作战数据</strong><em>RECORDS</em></span><i>►</i></button>
-        <button class="bm-item" type="button" data-go="4"><b>04</b><span><strong>进入战场</strong><em>DEPLOY MAP</em></span><i>►</i></button>
+        <button class="bm-item" type="button" data-go="0"><b>01</b><span><strong>进入简报</strong><em>BRIEFING</em></span><i>►</i></button>
+        <button class="bm-item" type="button" data-go="2"><b>02</b><span><strong>选择装备</strong><em>LOADOUT</em></span><i>►</i></button>
+        <button class="bm-item" type="button" data-go="3"><b>03</b><span><strong>我的档案</strong><em>PROFILE</em></span><i>►</i></button>
+        <button class="bm-item" type="button" data-go="4"><b>04</b><span><strong>战术打击</strong><em>STRIKE</em></span><i>►</i></button>
       </div>
       <p class="boot-hint">数字键 1-4 快速选择 · <b>CTRL + K</b> 随时呼出指挥台 · 点击任意处跳过</p>
     </div>
@@ -51,13 +51,13 @@
   <a class="logo" href="#scene-home" data-goto="0"><span class="mark">C</span>COUNTER<em>-STRIKE</em></a>
   <nav>
     <ul class="nav-links">
-      <li><a href="#scene-home" data-goto="0">概览</a></li>
-      <li><a href="#scene-engine" data-goto="1">引擎</a></li>
-      <li><a href="#scene-arsenal" data-goto="2">武器库</a></li>
-      <li><a href="#scene-manifesto" data-goto="3">数据</a></li>
-      <li><a href="#scene-maps" data-goto="4">战场</a></li>
-      <li><a href="#scene-spray" data-goto="5">喷涂</a></li>
-      <li><a href="#scene-cta" data-goto="6">参战</a></li>
+      <li><a href="#scene-home" data-goto="0">简报</a></li>
+      <li><a href="#scene-engine" data-goto="1">系统</a></li>
+      <li><a href="#scene-arsenal" data-goto="2">装备</a></li>
+      <li><a href="#scene-manifesto" data-goto="3">档案</a></li>
+      <li><a href="#scene-maps" data-goto="4">地图</a></li>
+      <li><a href="#scene-spray" data-goto="5">留痕</a></li>
+      <li><a href="#scene-cta" data-goto="6">部署</a></li>
     </ul>
   </nav>
   <div class="nav-cta">
@@ -70,23 +70,23 @@
 
 <div class="mobile-menu" id="mobileMenu">
   <button class="mm-console" id="mobileConsole" type="button">▸ 指挥台 · CTRL K</button>
-  <a href="#scene-home" data-goto="0">概览</a>
-  <a href="#scene-engine" data-goto="1">引擎</a>
-  <a href="#scene-arsenal" data-goto="2">武器库</a>
-  <a href="#scene-manifesto" data-goto="3">数据</a>
-  <a href="#scene-maps" data-goto="4">战场</a>
-  <a href="#scene-spray" data-goto="5">喷涂</a>
-  <a href="#scene-cta" data-goto="6">参战</a>
+  <a href="#scene-home" data-goto="0">简报</a>
+  <a href="#scene-engine" data-goto="1">系统</a>
+  <a href="#scene-arsenal" data-goto="2">装备</a>
+  <a href="#scene-manifesto" data-goto="3">档案</a>
+  <a href="#scene-maps" data-goto="4">地图</a>
+  <a href="#scene-spray" data-goto="5">留痕</a>
+  <a href="#scene-cta" data-goto="6">部署</a>
 </div>
 
 <!-- side scene dots -->
 <nav class="side-rail" id="sideRail" aria-label="空间导航">
-  <a href="#scene-home" data-goto="0"><b>01 HOME</b><span></span></a>
-  <a href="#scene-engine" data-goto="1"><b>02 ENGINE</b><span></span></a>
-  <a href="#scene-arsenal" data-goto="2"><b>03 ARSENAL</b><span></span></a>
-  <a href="#scene-manifesto" data-goto="3"><b>04 DATA</b><span></span></a>
-  <a href="#scene-maps" data-goto="4"><b>05 MAPS</b><span></span></a>
-  <a href="#scene-spray" data-goto="5"><b>06 GRAFFITI</b><span></span></a>
+  <a href="#scene-home" data-goto="0"><b>01 BRIEFING</b><span></span></a>
+  <a href="#scene-engine" data-goto="1"><b>02 SYSTEMS</b><span></span></a>
+  <a href="#scene-arsenal" data-goto="2"><b>03 LOADOUT</b><span></span></a>
+  <a href="#scene-manifesto" data-goto="3"><b>04 PROFILE</b><span></span></a>
+  <a href="#scene-maps" data-goto="4"><b>05 STRIKE</b><span></span></a>
+  <a href="#scene-spray" data-goto="5"><b>06 MARK</b><span></span></a>
   <a href="#scene-cta" data-goto="6"><b>07 DEPLOY</b><span></span></a>
   <a href="#scene-footer" data-goto="7"><b>08 INFO</b><span></span></a>
 </nav>
@@ -95,7 +95,7 @@
 <div class="scene-hud" id="sceneHud">
   <span class="sh-index" id="shIndex">01</span>
   <span class="sh-line"></span>
-  <span class="sh-name" id="shName">HOME</span>
+  <span class="sh-name" id="shName">BRIEFING</span>
   <span class="sh-total">/ 08</span>
 </div>
 <div class="pager-hint" id="pagerHint">
@@ -111,7 +111,7 @@
 <main class="stage" id="stage">
 
   <!-- ========== SCENE 01 · HERO ========== -->
-  <section class="scene hero" id="scene-home" data-trans="zoom" data-name="HOME">
+  <section class="scene hero" id="scene-home" data-trans="zoom" data-name="BRIEFING">
     <div class="hero-bg">
       <img id="heroImg" src="images/hero.jpg" alt="CS2 主视觉">
     </div>
@@ -156,7 +156,7 @@
   </section>
 
   <!-- ========== SCENE 02 · ENGINE BENTO ========== -->
-  <section class="scene has-scroll" id="scene-engine" data-trans="push" data-name="ENGINE">
+  <section class="scene has-scroll" id="scene-engine" data-trans="push" data-name="SYSTEMS">
     <div class="scene-scroll" data-scroll>
       <div class="scene-pad container">
         <div class="section-head reveal">
@@ -230,7 +230,7 @@
   </section>
 
   <!-- ========== SCENE 03 · ARSENAL ========== -->
-  <section class="scene has-scroll" id="scene-arsenal" data-trans="tilt" data-name="ARSENAL">
+  <section class="scene has-scroll" id="scene-arsenal" data-trans="tilt" data-name="LOADOUT">
     <div class="scene-scroll" data-scroll>
       <div class="scene-pad container">
         <div class="section-head reveal">
@@ -319,108 +319,89 @@
   </section>
 
   <!-- ========== SCENE 04 · MANIFESTO + STATS ========== -->
-  <section class="scene manifesto" id="scene-manifesto" data-trans="zoom" data-name="DATA">
+  <section class="scene manifesto" id="scene-manifesto" data-trans="zoom" data-name="PROFILE">
     <div class="stats-bg">
       <img id="statsImg" src="images/stat-bg.jpg" alt="">
     </div>
     <div class="scene-pad mf-inner">
       <div class="mf-words">
-        <p class="mf-word reveal">PRECISION <em>精准</em></p>
-        <p class="mf-word reveal" data-delay="1">TACTICS <em>战术</em></p>
-        <p class="mf-word reveal" data-delay="2">VICTORY <em>胜利</em></p>
-        <p class="mf-word reveal" data-delay="3">LEGACY <em>传承</em></p>
+        <p class="mf-word reveal">ENTRY <em>突入</em></p>
+        <p class="mf-word reveal" data-delay="1">TACTICAL <em>战术</em></p>
+        <p class="mf-word reveal" data-delay="2">PATIENCE <em>耐心</em></p>
+        <p class="mf-word mf-word-you reveal" data-delay="3">YOU <em>是你</em></p>
       </div>
-      <div class="stats-grid">
-        <div class="stat reveal">
-          <span class="idx">/ 01</span>
-          <div class="num"><span data-count="180">0</span><span>万+</span></div>
-          <div class="cap">Peak Players · 峰值在线</div>
+      <div class="prof-bottom">
+        <div class="stats-grid">
+          <div class="stat reveal">
+            <span class="idx">/ ROUNDS</span>
+            <div class="num"><span id="pfRounds">0</span></div>
+            <div class="cap">部署轮次 · 每次接入 +1</div>
+          </div>
+          <div class="stat reveal" data-delay="1">
+            <span class="idx">/ INSPECTS</span>
+            <div class="num"><span id="pfInspects">0</span></div>
+            <div class="cap">武器检视 · 装备研究</div>
+          </div>
+          <div class="stat reveal" data-delay="2">
+            <span class="idx">/ SCANS</span>
+            <div class="num"><span id="pfScans">0</span></div>
+            <div class="cap">扫描命中 · 快速移动</div>
+          </div>
+          <div class="stat reveal" data-delay="3">
+            <span class="idx">/ PRIMARY</span>
+            <div class="num num-text"><span id="pfPrimary">--</span></div>
+            <div class="cap">常用武器 · 系统判定</div>
+          </div>
         </div>
-        <div class="stat reveal" data-delay="1">
-          <span class="idx">/ 02</span>
-          <div class="num"><span data-count="9">0</span></div>
-          <div class="cap">Active Duty Maps · 现役地图</div>
-        </div>
-        <div class="stat reveal" data-delay="2">
-          <span class="idx">/ 03</span>
-          <div class="num"><span data-count="400">0</span><span>+</span></div>
-          <div class="cap">Pro Tournaments · 职业赛事</div>
-        </div>
-        <div class="stat reveal" data-delay="3">
-          <span class="idx">/ 04</span>
-          <div class="num"><span data-count="27">0</span><span>年</span></div>
-          <div class="cap">Legacy · 电竞传承</div>
+        <div class="prof-card reveal" data-delay="2">
+          <div class="pc-head">
+            <p class="pc-label">BEHAVIORAL PROFILE // 行为画像</p>
+            <p class="pc-type"><b id="pfType">UNCLASSIFIED</b><i id="pfConf">CONFIDENCE&nbsp;--%</i></p>
+          </div>
+          <div class="pc-bars" id="pfBars">
+            <div class="pc-bar"><span class="pb-name">ENTRY</span><div class="pb-track"><i id="pbEntry"></i></div><b id="pbEntryVal">0</b></div>
+            <div class="pc-bar"><span class="pb-name">TACTICAL</span><div class="pb-track"><i id="pbTactical"></i></div><b id="pbTacticalVal">0</b></div>
+            <div class="pc-bar"><span class="pb-name">PATIENCE</span><div class="pb-track"><i id="pbPatience"></i></div><b id="pbPatienceVal">0</b></div>
+          </div>
+          <p class="pc-note" id="pfNote">信号不足，系统正在观察你 —— 检视装备、读取部位情报、使用指挥台、快速移动鼠标或进入部署，都会暴露你的作战风格。</p>
+          <p class="pc-status" id="pfStatus"></p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ========== SCENE 05 · MAPS RAIL ========== -->
-  <section class="scene maps-scene" id="scene-maps" data-trans="push" data-name="MAPS">
+  <section class="scene maps-scene" id="scene-maps" data-trans="push" data-name="STRIKE">
     <div class="scene-pad maps-wrap">
       <div class="maps-head reveal">
         <div>
-          <p class="section-index">02 — ACTIVE DUTY</p>
-          <h2 class="display section-title"><span class="mask-line"><span>全球<span class="outline">战场</span></span></span></h2>
+          <p class="section-index">02 — TACTICAL STRIKE NETWORK</p>
+          <h2 class="display section-title"><span class="mask-line"><span>战术<span class="outline">打击图</span></span></span></h2>
         </div>
-        <div class="rail-tools">
-          <span class="rail-count"><b id="railCur">01</b> / 04</span>
-          <button class="rail-btn" id="railPrev" aria-label="上一张">←</button>
-          <button class="rail-btn" id="railNext" aria-label="下一张">→</button>
-        </div>
+        <p class="maps-sub">DE_INFERNO // 战区实时连线 —— 这不是图片，是一张可以操作的地图</p>
       </div>
 
-      <div class="map-rail no-scrollbar" id="mapRail">
-        <a class="map-card reveal" href="#scene-cta" data-goto="6">
-          <img src="images/map-inferno.jpg" alt="Inferno 炼狱小镇" loading="lazy">
-          <div class="map-veil"></div>
-          <span class="map-hoverline"></span>
-          <span class="map-corner mc-tl"></span><span class="map-corner mc-br"></span>
-          <div class="map-info">
-            <p class="map-code">DE_INFERNO // 01</p>
-            <h3 class="map-name">炼狱小镇</h3>
-            <p class="map-loc">Italy · 爆破模式</p>
-          </div>
-        </a>
-
-        <a class="map-card reveal" data-delay="1" href="#scene-cta" data-goto="6">
-          <img src="images/map-mirage.jpg" alt="Mirage 荒漠迷城" loading="lazy">
-          <div class="map-veil"></div>
-          <span class="map-hoverline"></span>
-          <span class="map-corner mc-tl"></span><span class="map-corner mc-br"></span>
-          <div class="map-info">
-            <p class="map-code">DE_MIRAGE // 02</p>
-            <h3 class="map-name">荒漠迷城</h3>
-            <p class="map-loc">Morocco · 爆破模式</p>
-          </div>
-        </a>
-
-        <a class="map-card reveal" data-delay="2" href="#scene-cta" data-goto="6">
-          <img src="images/map-nuke.jpg" alt="Nuke 核子危机" loading="lazy">
-          <div class="map-veil"></div>
-          <span class="map-hoverline"></span>
-          <span class="map-corner mc-tl"></span><span class="map-corner mc-br"></span>
-          <div class="map-info">
-            <p class="map-code">DE_NUKE // 03</p>
-            <h3 class="map-name">核子危机</h3>
-            <p class="map-loc">Germany · 爆破模式</p>
-          </div>
-        </a>
-
-        <a class="map-card map-more reveal" data-delay="3" href="#scene-cta" data-goto="6">
-          <div>
-            <p class="mm-code">ACTIVE DUTY GROUP // 04</p>
-            <h3>查看全部<br><em>战场地图</em></h3>
-            <span class="mm-go">→</span>
-          </div>
-        </a>
+      <div class="mapops reveal" data-delay="1" id="mapOps">
+        <div class="mapops-stage" id="mapStage">
+          <canvas id="mapCanvas" aria-label="Inferno 战术节点图"></canvas>
+          <div class="mapops-corner mc-a"></div>
+          <div class="mapops-corner mc-b"></div>
+          <span class="mapops-zoom" id="mapZoom">ZOOM 1.00×</span>
+        </div>
+        <aside class="mapops-panel">
+          <p class="mp-code" id="mpCode">AWAITING SELECTION // 等待坐标</p>
+          <h3 class="mp-name" id="mpName">选择一个节点</h3>
+          <p class="mp-desc" id="mpDesc">点击金色节点读取该区域战术情报。<br>滚轮缩放 · 按住拖拽平移 · ENTER 部署。</p>
+          <ul class="mp-list" id="mpList"></ul>
+          <button class="btn btn-primary mp-deploy" id="mpDeploy" type="button" disabled>部署 DEPLOY <span class="arr">→</span></button>
+          <p class="mp-hint">DRAG / WHEEL / CLICK / ENTER</p>
+        </aside>
       </div>
-      <p class="rail-hint">← 横向拖拽浏览战场 · 滚轮上下切换空间 →</p>
     </div>
   </section>
 
   <!-- ========== SCENE 06 · GRAFFITI WALL ========== -->
-  <section class="scene graffiti-scene" id="scene-spray" data-trans="tilt" data-name="GRAFFITI">
+  <section class="scene graffiti-scene" id="scene-spray" data-trans="tilt" data-name="MARK">
     <canvas id="sprayCanvas" aria-label="互动喷涂墙"></canvas>
     <div class="scene-pad spray-overlay">
       <div class="reveal">
@@ -449,6 +430,17 @@
       <div class="hero-actions reveal" data-delay="3" style="justify-content:center">
         <a href="#scene-home" class="btn btn-primary" data-goto="0" data-magnetic>回到起点 <span class="arr">↺</span></a>
       </div>
+      <div class="aftermath" id="aftermath" hidden>
+        <p class="am-title">ROUND <b id="amRound">--</b> COMPLETE // 本轮结算</p>
+        <div class="am-grid">
+          <span>TYPE <b id="amType">--</b></span>
+          <span>PRIMARY <b id="amPrimary">--</b></span>
+          <span>SCANS <b id="amScans">--</b></span>
+          <span>ANOMALY <b id="amAnomaly">NOMINAL</b></span>
+        </div>
+        <p class="am-note" id="amNote"></p>
+        <button class="btn btn-ghost am-again" id="amAgain" type="button">再次部署 DEPLOY AGAIN <span class="arr">↻</span></button>
+      </div>
     </div>
   </section>
 
@@ -463,9 +455,9 @@
         <div class="footer-col">
           <h4>Game</h4>
           <ul>
-            <li><a href="#scene-arsenal" data-goto="2">武器库</a></li>
-            <li><a href="#scene-maps" data-goto="4">战场地图</a></li>
-            <li><a href="#scene-manifesto" data-goto="3">游戏数据</a></li>
+            <li><a href="#scene-arsenal" data-goto="2">装备检视</a></li>
+            <li><a href="#scene-maps" data-goto="4">战术地图</a></li>
+            <li><a href="#scene-manifesto" data-goto="3">作战档案</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -514,7 +506,10 @@
   <div class="insp-window" role="dialog" aria-label="武器战术检视">
     <header class="insp-head">
       <div class="insp-id"><span class="insp-code" id="inspCode"></span><h3 id="inspName"></h3></div>
-      <button class="insp-close" id="inspClose" type="button">✕ ESC</button>
+      <div class="insp-head-right">
+        <span class="insp-signal" id="inspSignal" hidden>⚠ UNKNOWN SIGNAL DETECTED</span>
+        <button class="insp-close" id="inspClose" type="button">✕ ESC</button>
+      </div>
     </header>
     <div class="insp-body">
       <div class="insp-stage">
@@ -540,6 +535,30 @@
 <div class="scanfx" id="scanFx" aria-hidden="true"><span class="scan-line"></span><span class="scan-tag">◉ TRACKING</span></div>
 <div class="toasts" id="toasts"></div>
 
+<!-- ================= RECOVER // 隐藏档案（ARG） ================= -->
+<div class="recover" id="recover" aria-hidden="true">
+  <div class="rec-backdrop" data-rec-close></div>
+  <div class="rec-window" role="dialog" aria-label="未知信号档案">
+    <div class="rec-head">
+      <span class="rec-code">CLASSIFIED // CHANNEL 05</span>
+      <button class="rec-close" id="recClose" type="button">断开 X ESC</button>
+    </div>
+    <div class="rec-body">
+      <p class="rec-line rec-warn">▓▒░ UNAUTHORIZED NODE REACHED ░▒▓</p>
+      <p class="rec-line"><span class="rec-ts" id="recTs"></span> &gt; 后门稳定。你正在读取一段不属于这个页面的档案。</p>
+      <p class="rec-line">&gt; 每一次快速移动都被记录。每一次武器检视都被计数。</p>
+      <p class="rec-line">&gt; 你以为是你在浏览这个系统——</p>
+      <p class="rec-line rec-pr">&gt; 其实是系统在确认：你，就是 OPERATOR 05。</p>
+      <div class="rec-file">
+        <p>FILE 05 — DECRYPTED FRAGMENT</p>
+        <code>“PLAYER 05 在地图里留下了问号，<br>在墙上留下了标记，<br>然后第 <b id="recRound">--</b> 次回到了这里。<br>系统不评价玩家。系统只是记得。”</code>
+      </div>
+      <p class="rec-line rec-dim">// 本页不存在于导航。请勿对外分享坐标。</p>
+      <button class="btn btn-ghost rec-seal" id="recSeal" type="button">重新封存档案 SEAL ARCHIVE</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/cursor.js"></script>
 <script src="js/fx.js"></script>
 <script src="js/spray.js"></script>
@@ -549,6 +568,7 @@
 <script src="js/boot.js"></script>
 <script src="js/terminal.js"></script>
 <script src="js/anomaly.js"></script>
+<script src="js/mapos.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

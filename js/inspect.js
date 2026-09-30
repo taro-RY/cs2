@@ -308,6 +308,8 @@
     hots.querySelectorAll('.hot').forEach((h, j) => h.classList.toggle('on', j === i));
     tabs.querySelectorAll('.insp-tab').forEach((t, j) => t.classList.toggle('on', j === i));
     info.innerHTML = '<b>PART ' + String(i + 1).padStart(2, '0') + ' // ' + p.t + '</b><span>' + p.d + '</span>';
+    // 每次主动读取部位情报都计入战术倾向
+    if (window.Store) Store.bumpHotspots();
   }
   function resetInfo() {
     hots.querySelectorAll('.hot').forEach(h => h.classList.remove('on'));
@@ -400,6 +402,16 @@
   rot.addEventListener('pointerup', endDrag);
   rot.addEventListener('pointercancel', endDrag);
 
+  /* ---------------- 后门信号泄漏 ---------------- */
+  const signalEl = document.getElementById('inspSignal');
+  function syncSignal() {
+    if (!signalEl) return;
+    const leak = !!(window.Store && Store.anomaly);
+    signalEl.hidden = !leak;
+    signalEl.classList.toggle('flicker', leak);
+  }
+  document.addEventListener('ctos:anomaly', syncSignal);
+
   /* ---------------- 开关 ---------------- */
   function open(id) {
     const w = WEAPONS[id];
@@ -407,6 +419,7 @@
     cur = w;
     setAngle(0);
     populate(w);
+    syncSignal();
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('insp-open');

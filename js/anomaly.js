@@ -33,6 +33,16 @@
   const at = (fn, ms) => timers.push(setTimeout(fn, ms));
   function clearTimers() { timers.forEach(clearTimeout); timers = []; }
 
+  // 首次解锁：更新按钮并广播泄漏事件（检视器 / 地图板等订阅）
+  function markUnlocked() {
+    if (!window.Store) return;
+    const fresh = Store.unlockAnomaly();
+    if (!fresh) return;
+    btn.textContent = '[ BACKDOOR ACTIVE ]';
+    btn.classList.add('unlocked');
+    document.dispatchEvent(new CustomEvent('ctos:anomaly'));
+  }
+
   const hex = () => Array.from({ length: 6 }, () =>
     '0x' + Math.floor(Math.random() * 0xffff).toString(16).padStart(4, '0')).join('  ');
 
@@ -84,13 +94,11 @@
       }, 4700);
 
       at(() => {
-        if (window.Store) window.Store.unlockAnomaly();
+        markUnlocked();
         stage('<p class="gl-tag">CT-OS // HIDDEN CHANNEL</p>' +
           '<h2 class="gl-title gl-gold">BACKDOOR<br>ESTABLISHED</h2>' +
           '<p class="gl-sub">欢迎回来，干员。隐藏频道已解锁，系统会记得你。</p>' +
           '<p class="gl-meta">[ 点击任意处返回 ]</p>', 'gl-ok');
-        btn.textContent = '[ BACKDOOR ACTIVE ]';
-        btn.classList.add('unlocked');
       }, 6600);
     }
 
@@ -101,13 +109,11 @@
         // 直接进入解锁结局
         clearTimers();
         document.body.classList.remove('signal-lost');
-        if (window.Store) window.Store.unlockAnomaly();
+        markUnlocked();
         stage('<p class="gl-tag">CT-OS // HIDDEN CHANNEL</p>' +
           '<h2 class="gl-title gl-gold">BACKDOOR<br>ESTABLISHED</h2>' +
           '<p class="gl-sub">欢迎回来，干员。隐藏频道已解锁，系统会记得你。</p>' +
           '<p class="gl-meta">[ 点击任意处返回 ]</p>', 'gl-ok');
-        btn.textContent = '[ BACKDOOR ACTIVE ]';
-        btn.classList.add('unlocked');
       } else {
         fx.removeEventListener('click', onClick);
         fx.classList.remove('on');
@@ -149,9 +155,52 @@
     clearTimeout(scanTimer);
     scanFx.style.top = y + 'px';
     scanFx.classList.add('on');
-    if (window.Store) window.Store.bumpScans();
+    const n = window.Store ? Store.bumpScans() : 0;
+    observeScans(n);
     scanTimer = setTimeout(() => scanFx.classList.remove('on'), 950);
   }
 
-  window.Anomaly = { run, toast, triggerScan };
+  /* 扫描观察层：动作 → 记录 → 推断。每条提示只出现一次。 */
+  function observeScans(n) {
+    if (!window.Store) return;
+    if (n === 3 && Store.once('scan3')) {
+      setTimeout(() => toast('TACTICAL SCAN // 已记录 3 次扫描 — 移动模式分析中', 'warn'), 700);
+    } else if (n === 6 && Store.once('scan6')) {
+      setTimeout(() => toast('MOVEMENT PATTERN: ERRATIC — 你在测试这个系统吗？', 'warn'), 700);
+    } else if (n === 10 && Store.once('scan10')) {
+      setTimeout(() => toast('BEHAVIORAL ANALYSIS // OPERATOR: IMPATIENT · CONFIDENCE 82%', 'err'), 700);
+    }
+  }
+
+  /* ---------------- RECOVER // 隐藏档案页（ARG 终点） ---------------- */
+  const rec = document.getElementById('recover');
+  function openRecover() {
+    if (!rec) return;
+    const ts = document.getElementById('recTs');
+    const rd = document.getElementById('recRound');
+    if (ts) ts.textContent = '[' + new Date().toLocaleTimeString('zh-CN') + ']';
+    if (rd) rd.textContent = String(window.Store ? Store.round : 1).padStart(2, '0');
+    rec.classList.add('open');
+    rec.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('rec-open');
+  }
+  function closeRecover() {
+    if (!rec) return;
+    rec.classList.remove('open');
+    rec.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('rec-open');
+  }
+  if (rec) {
+    rec.querySelector('[data-rec-close]').addEventListener('click', closeRecover);
+    document.getElementById('recClose').addEventListener('click', closeRecover);
+    document.getElementById('recSeal').addEventListener('click', closeRecover);
+  }
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && rec && rec.classList.contains('open')) {
+      e.preventDefault();
+      closeRecover();
+    }
+  });
+
+  window.Anomaly = { run, toast, triggerScan, recover: openRecover };
 })();

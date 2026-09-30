@@ -13,6 +13,7 @@
   const barEl = document.getElementById('bootBar');
 
   const round = String((window.Store && window.Store.round) || 1).padStart(2, '0');
+  const isReturn = window.Store && Store.round > 1;
 
   const LINES = [
     'CT-OS v2.6.0 — TACTICAL OPERATING SYSTEM',
@@ -22,11 +23,16 @@
     '> calibrating volumetric smoke ... <ok>OK</ok>',
     '> sync active duty group ......... <ok>OK</ok>',
     '> biometric handshake ............ <ok>OK</ok>',
-    '> loading operator profile ....... <ok>OK</ok>',
+    '> loading operator profile ....... <ok>OK</ok>'
+  ];
+  if (window.Store && Store.anomaly) {
+    LINES.push('> unknown handshake ............. <warn>ACCEPTED</warn>');
+  }
+  LINES.push(
     '',
     '<sys>SYSTEM ONLINE</sys>',
-    '<sys>PLAYER DETECTED — ROUND ' + round + '</sys>'
-  ];
+    '<sys>' + (isReturn ? 'WELCOME BACK — ROUND ' : 'PLAYER DETECTED — ROUND ') + round + '</sys>'
+  );
 
   let done = false;
   let menuShown = false;
@@ -38,15 +44,33 @@
     p.className = 'bl-line';
     p.innerHTML = html
       .replace(/<ok>/g, '<i class="bl-ok">').replace(/<\/ok>/g, '</i>')
+      .replace(/<warn>/g, '<i class="bl-warn">').replace(/<\/warn>/g, '</i>')
       .replace(/<sys>/g, '<i class="bl-sys">').replace(/<\/sys>/g, '</i>');
     logEl.appendChild(p);
     return p;
   }
 
+  // 系统根据历史行为识别玩家：首次 / 回访 / 有明确主武器偏好
+  function identifyLine() {
+    if (!window.Store || !isReturn) {
+      return 'ROUND <b>' + round + '</b> // OPERATOR IDENTIFIED // 选择你的行动';
+    }
+    const fav = Store.favorite(window.WEAPONS || null);
+    let line = 'WELCOME BACK // ROUND <b>' + round + '</b>';
+    if (fav && fav.n >= 3 && fav.name) {
+      line += ' // PRIMARY WEAPON: <b>' + fav.name + '</b>';
+      line += '<span class="bid-note">你最近 ' + fav.n + ' 次都选择了它</span>';
+    } else {
+      line += ' // OPERATOR IDENTIFIED // 选择你的行动';
+    }
+    if (Store.anomaly) line += '<span class="bid-warn">// BACKDOOR ACTIVE</span>';
+    return line;
+  }
+
   function showMenu() {
     if (menuShown) return;
     menuShown = true;
-    idEl.innerHTML = 'ROUND <b>' + round + '</b> // OPERATOR IDENTIFIED // 选择你的行动';
+    idEl.innerHTML = identifyLine();
     menuEl.hidden = false;
     // 重启动画
     menuEl.classList.remove('in');

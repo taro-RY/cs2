@@ -30,6 +30,7 @@
     return document.body.classList.contains('booting') ||
            document.body.classList.contains('pal-open') ||
            document.body.classList.contains('insp-open') ||
+           document.body.classList.contains('rec-open') ||
            document.body.classList.contains('glitching');
   }
 
@@ -118,6 +119,9 @@
   }
   addEventListener('wheel', (e) => {
     if (locked || blocked()) return;
+    // 战术地图板内的滚轮用于缩放，绝不翻页
+    const onMapBoard = e.composedPath().some(el => el && (el.id === 'mapStage' || el.id === 'mapCanvas'));
+    if (onMapBoard) return;
     const scrollHost = e.composedPath().find(el => el.dataset && el.dataset.scroll !== undefined);
     if (innerCanScroll(scrollHost, e.deltaY)) return; // 交给内部滚动
     if (Math.abs(e.deltaY) < 4) return;
@@ -169,6 +173,9 @@
     // 在喷涂墙上滑动 → 手势全部留给喷涂互动
     const onSpray = e.composedPath().some(el => el.id === 'sprayCanvas');
     if (onSpray) return;
+    // 在战术地图板上滑动 → 用于平移地图
+    const onMapBoard = e.composedPath().some(el => el && (el.id === 'mapStage' || el.id === 'mapCanvas'));
+    if (onMapBoard) return;
 
     touchHandled = true;
     if (Math.abs(dy) > Math.abs(dx)) dy < 0 ? next() : prev();
@@ -188,64 +195,7 @@
   document.getElementById('pgUp').addEventListener('click', prev);
   document.getElementById('pgDown').addEventListener('click', next);
 
-  /* ---------- 地图轨道：箭头 + 拖拽 + 计数 ---------- */
-  const rail = document.getElementById('mapRail');
-  const railCur = document.getElementById('railCur');
-  const cards = [...rail.querySelectorAll('.map-card')];
-  let railPage = 0;
-
-  // 依据卡片与视口左锚线的距离推断当前页（宽屏下末页可能多卡同屏）
-  function pageFromScroll() {
-    const pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0;
-    const anchor = rail.getBoundingClientRect().left + pad;
-    let best = 0, bd = Infinity;
-    cards.forEach((c, i) => {
-      const d = Math.abs(c.getBoundingClientRect().left - anchor);
-      if (d < bd) { bd = d; best = i; }
-    });
-    return best;
-  }
-  function updateRailCount() { railCur.textContent = String(railPage + 1).padStart(2, '0'); }
-  let snapTimer = 0;
-  function scrollToCard(i) {
-    railPage = Math.max(0, Math.min(cards.length - 1, i));
-    // 目标超出最大滚动距离时由浏览器 clamp（末页多卡同屏）
-    const target = Math.min(cards[railPage].offsetLeft - cards[0].offsetLeft, rail.scrollWidth - rail.clientWidth);
-    // mandatory snap 会打断 smooth 滚动，临时关闭，到位后恢复
-    rail.style.scrollSnapType = 'none';
-    rail.scrollTo({ left: target, behavior: reduceMotion ? 'auto' : 'smooth' });
-    updateRailCount();
-    clearTimeout(snapTimer);
-    snapTimer = setTimeout(() => { rail.style.scrollSnapType = ''; }, 650);
-  }
-  document.getElementById('railPrev').addEventListener('click', () => scrollToCard(railPage - 1));
-  document.getElementById('railNext').addEventListener('click', () => scrollToCard(railPage + 1));
-  rail.addEventListener('scroll', () => requestAnimationFrame(() => { railPage = pageFromScroll(); updateRailCount(); }), { passive: true });
-  updateRailCount();
-
-  // 指针拖拽滚动（拖拽距离超阈值时抑制随后的卡片点击跳转）
-  let dragging = false, dragMoved = 0, startX = 0, startLeft = 0;
-  rail.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.rail-btn')) return;
-    dragging = true; dragMoved = 0; startX = e.clientX; startLeft = rail.scrollLeft;
-    rail.classList.add('dragging');
-  });
-  addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    const dx = e.clientX - startX;
-    dragMoved = Math.max(dragMoved, Math.abs(dx));
-    rail.scrollLeft = startLeft - dx;
-  });
-  addEventListener('pointerup', () => {
-    if (!dragging) return;
-    dragging = false;
-    rail.classList.remove('dragging');
-    if (dragMoved > 8) {
-      const suppress = (ev) => { ev.preventDefault(); ev.stopPropagation(); rail.removeEventListener('click', suppress, true); };
-      rail.addEventListener('click', suppress, true);
-      setTimeout(() => rail.removeEventListener('click', suppress, true), 60);
-    }
-  });
+  /* ---------- 旧版地图卡片轨道已由战术地图板（mapos.js）取代 ---------- */
 
   /* ---------- 初始化（支持 hash 直达） ---------- */
   const hash = location.hash.replace('#', '');

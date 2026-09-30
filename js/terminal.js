@@ -14,11 +14,12 @@
     { c: 'help', a: '', d: '列出全部指令' },
     { c: 'inspect', a: '<ak47 | m4a1s | m4a4 | molotov>', d: '进入武器战术检视' },
     { c: 'open', a: '<inferno | mirage | nuke>', d: '部署至指定战场' },
-    { c: 'stats', a: '', d: '跳转作战数据' },
+    { c: 'stats', a: '', d: '跳转作战档案' },
     { c: 'whoami', a: '', d: '读取你的操作员档案' },
     { c: 'compare', a: '<武器A> <武器B>', d: '对比两件武器' },
     { c: 'deploy', a: '', d: '立即参战' },
     { c: 'hack', a: '', d: '？未知程序，不建议运行' },
+    { c: 'recover', a: '', d: '修复损坏的操作员档案', locked: true },
     { c: 'clear', a: '', d: '清空输出' }
   ];
   const sceneByMap = { inferno: 4, mirage: 4, nuke: 4 };
@@ -89,23 +90,56 @@
 
     if (cmd === 'clear') { out.innerHTML = ''; return; }
 
+    // 被识别的真实指令计入行为信号（未知指令不计数）
+    const knownCmd = CMDS.some(x => x.c === cmd && (!x.locked || (window.Store && Store.anomaly)));
+    if (knownCmd && window.Store) Store.bumpCommands();
+
     if (cmd === 'help') {
       print('AVAILABLE PROGRAMS — CT-OS:', 'pal-sys');
-      CMDS.forEach(x => print('<b>' + x.c + '</b> ' + x.a + ' <em>— ' + x.d + '</em>', 'pal-dim'));
+      CMDS.filter(x => !x.locked || (window.Store && Store.anomaly))
+        .forEach(x => print('<b>' + x.c + '</b> ' + x.a + ' <em>— ' + x.d + '</em>', x.locked ? 'pal-warn' : 'pal-dim'));
       return;
     }
 
     if (cmd === 'whoami') {
       const S = window.Store, W = window.WEAPONS || {};
+      const p = S.profile();
       print('OPERATOR PROFILE — ROUND ' + String(S.round).padStart(2, '0'), 'pal-sys');
       print('首次接入：' + new Date(S.firstAt).toLocaleString('zh-CN') + '（已服役 ' + S.daysSinceFirst() + ' 天）');
-      print('累计武器检视：' + S.totalInspects() + ' 次；战术扫描命中：' + S.scans + ' 次');
+      print('检视 ' + p.signals.inspects + ' · 扫描 ' + p.signals.scans +
+            ' · 情报 ' + p.signals.hotspots + ' · 命令 ' + p.signals.commands +
+            ' · 地图研判 ' + p.signals.mapTouches + ' · 在线 ' + p.signals.dwellMin + ' 分钟', 'pal-dim');
       const fav = S.favorite(W);
       if (fav) {
-        print('你已经检视过 <b>' + fav.n + '</b> 次 ' + fav.name + '。', fav.n >= 3 ? 'pal-warn' : '');
+        print('PRIMARY WEAPON：<b>' + fav.name + '</b>（已检视 ' + fav.n + ' 次）', fav.n >= 3 ? 'pal-warn' : '');
         if (fav.n >= 3) print('系统认为你正在准备一场比赛。', 'pal-warn');
       } else print('尚无武器检视记录 —— 试试 <b>inspect ak47</b>。', 'pal-dim');
-      print('后门状态：' + (S.anomaly ? '<b class="pal-warn">BACKDOOR ACTIVE</b>' : '未触发'), 'pal-dim');
+      if (p.ready) {
+        print('BEHAVIORAL TYPE：<b>' + p.type + '</b> · ' + p.typeCn +
+              '（CONFIDENCE ' + p.confidence + '%）', 'pal-sys');
+        print('ENTRY ' + p.scores.entry + ' / TACTICAL ' + p.scores.tactical +
+              ' / PATIENCE ' + p.scores.patience, 'pal-dim');
+      } else {
+        print('BEHAVIORAL TYPE：UNCLASSIFIED —— 信号不足，系统观察中。', 'pal-dim');
+      }
+      if (S.anomaly) {
+        print('⚠ OPERATOR PROFILE CORRUPTED', 'pal-err');
+        print('检测到未授权通道，部分身份数据指向 <b>OPERATOR 05</b>。', 'pal-warn');
+        print('输入 <b>recover</b> 尝试修复档案。', 'pal-warn');
+      } else {
+        print('后门状态：未触发', 'pal-dim');
+      }
+      return;
+    }
+
+    if (cmd === 'recover') {
+      if (!window.Store || !Store.anomaly) {
+        print('NO RECOVERABLE DATA —— 档案完好，没有需要修复的东西。', 'pal-err');
+        return;
+      }
+      print('OPENING CLASSIFIED CHANNEL 05 …', 'pal-warn');
+      hide();
+      setTimeout(() => { if (window.Anomaly) Anomaly.recover(); }, 320);
       return;
     }
 
@@ -121,6 +155,7 @@
     if (cmd === 'open') {
       const map = args[0];
       if (!(map in sceneByMap)) { print('ERR: 未知战场。可用：inferno / mirage / nuke', 'pal-err'); return; }
+      if (window.Store) Store.touchMap(map);
       print('DEPLOYING TO DE_' + map.toUpperCase() + ' …', 'pal-sys');
       hide();
       setTimeout(() => window.Pager.goTo(sceneByMap[map]), 260);
