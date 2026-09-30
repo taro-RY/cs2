@@ -22,6 +22,12 @@ https://creativecommons.org/licenses/by/4.0/
    File:   models/molotov.glb
    Changes: re-centered, scale-normalized, edge outline added.
 
+Maps:
+  assets/maps/dust2-radar.svg
+  Original hand-authored radar illustration for this project, drawn from
+  the publicly known de_dust2 layout. It is NOT a Valve screenshot, radar
+  extraction, or game file; free to reuse with this project's attribution.
+
 Engine: Three.js (MIT) — r160, self-hosted under vendor/.
 https://github.com/mrdoob/three.js
 

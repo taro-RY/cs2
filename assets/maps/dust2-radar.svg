@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- DE_DUST2 original fan-made flat callout plan (CT-OS project).
+       Hand-authored from the public layout; not a Valve asset.
+       Style: clean tactical plan view with embedded callouts. -->
+  <defs>
+    <style>
+      .blk{fill:#6e6448;stroke:#574e37;stroke-width:3;stroke-linejoin:round}
+      .prop{fill:#7d7253}
+      .road{fill:none;stroke:#d9cba3;stroke-width:46;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
+      .ct{font:700 19px 'Arial Narrow',Arial,sans-serif;fill:#32495f;letter-spacing:2px;paint-order:stroke;stroke:#c7b78f;stroke-width:4px;stroke-linejoin:round}
+      .t{font:700 19px 'Arial Narrow',Arial,sans-serif;fill:#6e332a;letter-spacing:2px;paint-order:stroke;stroke:#c7b78f;stroke-width:4px;stroke-linejoin:round}
+      .cal{font:700 15px 'Arial Narrow',Arial,sans-serif;fill:rgba(38,34,22,.85);letter-spacing:1.5px;paint-order:stroke;stroke:#c7b78f;stroke-width:3.5px;stroke-linejoin:round}
+      .site{font:800 34px 'Arial Narrow',Arial,sans-serif;letter-spacing:6px;paint-order:stroke;stroke:#c7b78f;stroke-width:3px;stroke-linejoin:round}
+      .siteA{fill:rgba(120,80,20,.6)}
+      .siteB{fill:rgba(120,40,30,.6)}
+    </style>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.25  0 0 0 .045 0"/>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" fill="#c7b78f"/>
+  <rect width="1024" height="1024" filter="url(#grain)"/>
+
+  <!-- ===== building masses (simple, large blocks) ===== -->
+  <g class="blk">
+    <!-- B site surroundings -->
+    <polygon points="0,0 330,0 330,86 150,86 120,118 56,150 0,214"/>
+    <polygon points="56,150 150,118 120,118 120,320 56,348 0,276 0,214"/>
+    <polygon points="330,0 476,0 476,150 330,150"/>
+    <polygon points="120,348 250,348 250,400 150,400 90,400 56,348"/>
+    <polygon points="330,300 410,300 410,400 300,400 300,340"/>
+
+    <!-- CT spawn -->
+    <polygon points="476,0 640,0 640,150 560,150 476,150"/>
+    <polygon points="476,300 560,300 600,360 560,420 476,420 410,400 410,300"/>
+
+    <!-- A site surroundings -->
+    <polygon points="640,0 906,0 906,96 640,96"/>
+    <polygon points="906,0 1024,0 1024,236 936,236 936,96"/>
+    <polygon points="600,360 740,300 740,360 620,420 560,420"/>
+    <polygon points="740,420 936,420 936,500 740,500"/>
+    <polygon points="936,236 1024,236 1024,420 936,420"/>
+    <polygon points="936,700 1024,700 1024,1024 820,1024 820,872 900,820"/>
+
+    <!-- Mid walls -->
+    <polygon points="250,400 340,400 340,800 250,800"/>
+    <polygon points="500,520 620,520 620,800 500,800"/>
+    <rect x="340" y="430" width="40" height="40" fill="#574e37"/>
+    <rect x="460" y="430" width="40" height="40" fill="#574e37"/>
+
+    <!-- Long walls -->
+    <polygon points="740,500 936,500 936,720 770,720 770,760 700,760 700,720 740,720"/>
+    <polygon points="620,420 700,420 700,520 620,520"/>
+    <polygon points="620,800 700,760 770,760 820,820 700,850 600,840 556,800"/>
+    <polygon points="820,820 900,820 820,872 740,872"/>
+
+    <!-- T spawn blocks -->
+    <polygon points="0,872 150,872 150,940 80,1024 0,1024"/>
+    <polygon points="250,880 470,880 470,940 250,980"/>
+    <polygon points="470,880 600,840 620,900 500,980 470,940"/>
+    <polygon points="80,1024 250,980 250,1024"/>
+    <polygon points="250,980 470,940 470,1024"/>
+    <polygon points="470,1024 500,980 620,900 700,940 740,1024"/>
+
+    <!-- Tunnels west mass -->
+    <polygon points="0,276 56,348 90,400 0,400"/>
+    <polygon points="0,400 90,400 150,400 150,470 56,470 0,520"/>
+    <polygon points="0,520 56,470 112,470 112,872 56,840 0,760"/>
+    <polygon points="0,760 56,840 150,872 80,940 0,872"/>
+  </g>
+
+  <!-- ===== site floors + site letters ===== -->
+  <polygon points="120,120 400,120 400,300 250,330 120,320" fill="rgba(210,180,150,.35)"/>
+  <polygon points="640,96 936,96 936,236 860,300 740,300 640,220" fill="rgba(214,180,130,.35)"/>
+  <text class="site siteB" x="356" y="250">B</text>
+  <text class="site siteA" x="668" y="130">A</text>
+
+  <!-- a few signature props -->
+  <g class="prop">
+    <rect x="180" y="200" width="70" height="46"/>
+    <rect x="276" y="190" width="46" height="36"/>
+    <polygon points="700,140 756,130 766,180 710,192"/>
+    <rect x="792" y="140" width="52" height="38"/>
+    <rect x="852" y="196" width="46" height="46"/>
+    <rect x="392" y="560" width="46" height="36"/>
+  </g>
+
+  <!-- ===== embedded callouts ===== -->
+  <g text-anchor="middle">
+    <text class="ct" x="536" y="248">CT SPAWN</text>
+    <text class="t"  x="372" y="868">T SPAWN</text>
+
+    <text class="cal" x="352" y="362">B DOORS</text>
+    <text class="cal" x="184" y="800">UPPER TUNNELS</text>
+    <text class="cal" x="184" y="610">TUNNELS</text>
+
+    <text class="cal" x="884" y="330">LONG A</text>
+    <text class="cal" x="880" y="404">LONG DOORS</text>
+    <text class="cal" x="664" y="478">PIT</text>
+    <text class="cal" x="800" y="612">LONG</text>
+    <text class="cal" x="678" y="330">SHORT</text>
+    <text class="cal" x="540" y="396">CATWALK</text>
+
+    <text class="cal" x="420" y="466">MID DOORS</text>
+    <text class="cal" x="416" y="624">X-BOX</text>
+    <text class="cal" x="430" y="700">MID</text>
+  </g>
+</svg>

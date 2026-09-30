@@ -1213,3 +1213,41 @@ body.loaded .hero-hud{opacity:1}
   .aftermath{margin-top:10px;padding-top:12px}
   .am-grid span{padding:8px}
 }
+
+/* ============================================================
+   DUST2 SANDBOX v0.4 — 工具栏
+   ============================================================ */
+.mp-tools{display:grid;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.mp-tool-label{font-family:var(--font-mono);font-size:.56rem;letter-spacing:.24em;color:var(--dim);margin-bottom:8px}
+.mp-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mp-btn{
+  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.14em;padding:9px 6px;
+  color:var(--muted);border:1px solid var(--line-strong);background:transparent;transition:.2s
+}
+.mp-btn.on{color:var(--accent-2);border-color:var(--accent);background:rgba(222,155,53,.08)}
+.mp-btn.ct.on{color:#8fc4f0;border-color:#5fa8e8;background:rgba(95,168,232,.08)}
+.mp-chiprow{display:flex;flex-wrap:wrap;gap:6px}
+.mp-chip{
+  font-family:var(--font-mono);font-size:.58rem;letter-spacing:.08em;padding:6px 9px;
+  color:var(--muted);border:1px solid var(--line);background:transparent;transition:.2s
+}
+.mp-chip.t.on{color:var(--accent-2);border-color:var(--accent);background:rgba(222,155,53,.08)}
+.mp-chip.ct.on{color:#8fc4f0;border-color:#5fa8e8;background:rgba(95,168,232,.08)}
+.mp-chip.smoke.on{color:#d7e0e6;border-color:#b9c4cc;background:rgba(185,196,204,.1)}
+.mp-chip.flash.on{color:#ffe9a8;border-color:#d9b558;background:rgba(255,233,168,.08)}
+.mp-chip.fire.on{color:#ffb088;border-color:#ff7a3c;background:rgba(255,122,60,.08)}
+.mp-clearutil{justify-self:start;margin-top:2px;background:none;border:none;
+  font-family:var(--font-mono);font-size:.56rem;letter-spacing:.18em;color:var(--dim);padding:4px 0;transition:.2s}
+.mp-clearutil:hover{color:var(--accent)}
+.mp-actions{margin-top:auto;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.mp-reset{
+  font-family:var(--font-mono);font-size:.58rem;letter-spacing:.14em;color:var(--muted);
+  border:1px solid var(--line-strong);background:transparent;padding:12px 14px;transition:.2s;white-space:nowrap
+}
+.mp-reset:hover{color:var(--accent-2);border-color:var(--accent)}
+.mp-actions .mp-deploy{margin-top:0}
+@media (max-width:900px){
+  .mp-tools{order:1}
+  .mp-actions{position:static;margin-top:10px}
+  #scene-maps .pager-arrows{display:none}
+}

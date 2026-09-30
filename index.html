@@ -381,26 +381,60 @@
     <div class="scene-pad maps-wrap">
       <div class="maps-head reveal">
         <div>
-          <p class="section-index">02 — TACTICAL STRIKE NETWORK</p>
-          <h2 class="display section-title"><span class="mask-line"><span>战术<span class="outline">打击图</span></span></span></h2>
+          <p class="section-index">02 — TACTICAL SANDBOX</p>
+          <h2 class="display section-title"><span class="mask-line"><span>沙二<span class="outline">战术沙盘</span></span></span></h2>
         </div>
-        <p class="maps-sub">DE_INFERNO // 战区实时连线 —— 这不是图片，是一张可以操作的地图</p>
+        <p class="maps-sub">DE_DUST2 // 在真实地图上推演路线与道具 —— 点击区域聚焦 · 拖拽平移 · 滚轮缩放</p>
       </div>
 
       <div class="mapops reveal" data-delay="1" id="mapOps">
         <div class="mapops-stage" id="mapStage">
-          <canvas id="mapCanvas" aria-label="Inferno 战术节点图"></canvas>
+          <canvas id="mapCanvas" aria-label="Dust II 战术沙盘"></canvas>
           <div class="mapops-corner mc-a"></div>
           <div class="mapops-corner mc-b"></div>
           <span class="mapops-zoom" id="mapZoom">ZOOM 1.00×</span>
         </div>
         <aside class="mapops-panel">
-          <p class="mp-code" id="mpCode">AWAITING SELECTION // 等待坐标</p>
-          <h3 class="mp-name" id="mpName">选择一个节点</h3>
-          <p class="mp-desc" id="mpDesc">点击金色节点读取该区域战术情报。<br>滚轮缩放 · 按住拖拽平移 · ENTER 部署。</p>
+          <div class="mp-tools">
+            <div class="mp-tool-group">
+              <p class="mp-tool-label">阵营视角</p>
+              <div class="mp-seg">
+                <button type="button" class="mp-btn on" data-fac="t">T 进攻</button>
+                <button type="button" class="mp-btn ct" data-fac="ct">CT 防守</button>
+              </div>
+            </div>
+            <div class="mp-tool-group">
+              <p class="mp-tool-label">进攻 / 回防路线</p>
+              <div class="mp-chiprow">
+                <button type="button" class="mp-chip t" data-route="long">LONG A</button>
+                <button type="button" class="mp-chip t" data-route="mid">MID SHORT</button>
+                <button type="button" class="mp-chip t" data-route="b">TUNNELS B</button>
+                <button type="button" class="mp-chip ct" data-route="ctA">CT→A</button>
+                <button type="button" class="mp-chip ct" data-route="ctB">CT→B</button>
+                <button type="button" class="mp-chip ct" data-route="ctM">CT→MID</button>
+              </div>
+            </div>
+            <div class="mp-tool-group">
+              <p class="mp-tool-label">投掷物轨迹</p>
+              <div class="mp-chiprow">
+                <button type="button" class="mp-chip smoke" data-util="xbox-smoke">X-Box 烟</button>
+                <button type="button" class="mp-chip smoke" data-util="ct-smoke">CT 烟</button>
+                <button type="button" class="mp-chip flash" data-util="long-flash">A 门瞬闪</button>
+                <button type="button" class="mp-chip fire" data-util="b-molly">车位火</button>
+                <button type="button" class="mp-chip fire" data-util="a-molly">A 平台火</button>
+              </div>
+              <button type="button" class="mp-clearutil" id="mpClearUtil">清除投掷物</button>
+            </div>
+          </div>
+          <p class="mp-code" id="mpCode">DE_DUST2 // TACTICAL SANDBOX</p>
+          <h3 class="mp-name" id="mpName">选择一个区域</h3>
+          <p class="mp-desc" id="mpDesc">点击地图上的区域或 A / B 包点查看战术情报</p>
           <ul class="mp-list" id="mpList"></ul>
-          <button class="btn btn-primary mp-deploy" id="mpDeploy" type="button" disabled>部署 DEPLOY <span class="arr">→</span></button>
-          <p class="mp-hint">DRAG / WHEEL / CLICK / ENTER</p>
+          <div class="mp-actions">
+            <button class="btn btn-primary mp-deploy" id="mpDeploy" type="button" disabled>部署 DEPLOY <span class="arr">→</span></button>
+            <button class="mp-reset" id="mpReset" type="button">复位视图</button>
+          </div>
+          <p class="mp-hint">DRAG / WHEEL / CLICK / DOUBLE-CLICK RESET / ENTER</p>
         </aside>
       </div>
     </div>
