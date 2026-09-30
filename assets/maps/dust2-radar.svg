@@ -1,110 +1,174 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <!-- DE_DUST2 original fan-made flat callout plan (CT-OS project).
-       Hand-authored from the public layout; not a Valve asset.
-       Style: clean tactical plan view with embedded callouts. -->
+       Hand-authored from the publicly known CS2 layout; not a Valve asset.
+       Orientation: B top-left, A top-right, T spawn bottom-center. -->
   <defs>
     <style>
-      .blk{fill:#6e6448;stroke:#574e37;stroke-width:3;stroke-linejoin:round}
-      .prop{fill:#7d7253}
-      .road{fill:none;stroke:#d9cba3;stroke-width:46;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
-      .ct{font:700 19px 'Arial Narrow',Arial,sans-serif;fill:#32495f;letter-spacing:2px;paint-order:stroke;stroke:#c7b78f;stroke-width:4px;stroke-linejoin:round}
-      .t{font:700 19px 'Arial Narrow',Arial,sans-serif;fill:#6e332a;letter-spacing:2px;paint-order:stroke;stroke:#c7b78f;stroke-width:4px;stroke-linejoin:round}
-      .cal{font:700 15px 'Arial Narrow',Arial,sans-serif;fill:rgba(38,34,22,.85);letter-spacing:1.5px;paint-order:stroke;stroke:#c7b78f;stroke-width:3.5px;stroke-linejoin:round}
-      .site{font:800 34px 'Arial Narrow',Arial,sans-serif;letter-spacing:6px;paint-order:stroke;stroke:#c7b78f;stroke-width:3px;stroke-linejoin:round}
-      .siteA{fill:rgba(120,80,20,.6)}
-      .siteB{fill:rgba(120,40,30,.6)}
+      .walk{fill:#93a8ad}
+      .walk2{fill:#a3b6ba}
+      .blk{fill:#5f7076}
+      .sp{fill:#728389}
+      .cal{font:600 15px 'Arial Narrow',Arial,sans-serif;fill:#eef3f4;letter-spacing:1px;paint-order:stroke;stroke:rgba(12,18,22,.85);stroke-width:3.5px;stroke-linejoin:round}
+      .cal2{font:600 13px 'Arial Narrow',Arial,sans-serif;fill:rgba(238,243,244,.82);letter-spacing:1px;paint-order:stroke;stroke:rgba(12,18,22,.85);stroke-width:3px;stroke-linejoin:round}
+      .site{font:800 30px 'Arial Narrow',Arial,sans-serif;letter-spacing:4px;paint-order:stroke;stroke:#93a8ad;stroke-width:3px}
+      .siteA{fill:#ffb24d}.siteB{fill:#ff7a5c}
+      .spawn{font:700 16px 'Arial Narrow',Arial,sans-serif;fill:#bfe6b4;letter-spacing:3px;paint-order:stroke;stroke:rgba(12,18,22,.9);stroke-width:3.5px}
     </style>
-    <filter id="grain" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n"/>
-      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.25  0 0 0 .045 0"/>
-    </filter>
+    <radialGradient id="fog" cx=".5" cy=".5" r=".75">
+      <stop offset=".55" stop-color="#10141a" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0c0f14" stop-opacity=".62"/>
+    </radialGradient>
   </defs>
 
-  <rect width="1024" height="1024" fill="#c7b78f"/>
-  <rect width="1024" height="1024" filter="url(#grain)"/>
+  <rect width="1024" height="1024" fill="#10141a"/>
 
-  <!-- ===== building masses (simple, large blocks) ===== -->
-  <g class="blk">
-    <!-- B site surroundings -->
-    <polygon points="0,0 330,0 330,86 150,86 120,118 56,150 0,214"/>
-    <polygon points="56,150 150,118 120,118 120,320 56,348 0,276 0,214"/>
-    <polygon points="330,0 476,0 476,150 330,150"/>
-    <polygon points="120,348 250,348 250,400 150,400 90,400 56,348"/>
-    <polygon points="330,300 410,300 410,400 300,400 300,340"/>
+  <!-- ===== walkable network (overlapping blobs merge visually) ===== -->
+  <g class="walk">
+    <!-- B site -->
+    <polygon points="150,92 286,88 296,214 128,226 108,166"/>
+    <!-- B tong west (假门 / B通) -->
+    <polygon points="108,166 128,226 150,250 58,250 48,200 66,150"/>
+    <!-- B doors + sand belt -->
+    <polygon points="250,214 430,206 470,250 430,300 296,300 296,214"/>
+    <!-- 沙地 -->
+    <polygon points="330,140 470,128 516,232 470,250 430,206 330,214"/>
+    <!-- B1 -->
+    <polygon points="296,300 432,300 432,432 286,432 256,360"/>
+    <!-- B2 hall -->
+    <polygon points="58,400 296,400 306,532 92,544 58,486"/>
+    <!-- B2 west arm -->
+    <polygon points="58,250 150,250 150,400 58,400"/>
+    <!-- tunnel down to garden -->
+    <polygon points="256,520 346,520 352,664 250,684 232,600"/>
+    <!-- garden -->
+    <polygon points="64,636 336,636 346,884 116,894 62,796"/>
+    <!-- garden platform -->
+    <polygon points="116,884 336,884 316,1024 60,1024 64,936"/>
+
+    <!-- T spawn -->
+    <rect x="296" y="928" width="208" height="96" rx="10"/>
+    <!-- T slope + andao -->
+    <polygon points="432,636 566,636 586,956 452,966 432,856"/>
+    <!-- mid vertical -->
+    <polygon points="432,428 514,428 514,640 432,640"/>
+    <!-- top mid -->
+    <polygon points="432,326 532,326 532,432 432,432"/>
+    <!-- mid-west L alcove -->
+    <polygon points="352,612 432,612 432,688 344,688"/>
 
     <!-- CT spawn -->
-    <polygon points="476,0 640,0 640,150 560,150 476,150"/>
-    <polygon points="476,300 560,300 600,360 560,420 476,420 410,400 410,300"/>
-
-    <!-- A site surroundings -->
-    <polygon points="640,0 906,0 906,96 640,96"/>
-    <polygon points="906,0 1024,0 1024,236 936,236 936,96"/>
-    <polygon points="600,360 740,300 740,360 620,420 560,420"/>
-    <polygon points="740,420 936,420 936,500 740,500"/>
-    <polygon points="936,236 1024,236 1024,420 936,420"/>
-    <polygon points="936,700 1024,700 1024,1024 820,1024 820,872 900,820"/>
-
-    <!-- Mid walls -->
-    <polygon points="250,400 340,400 340,800 250,800"/>
-    <polygon points="500,520 620,520 620,800 500,800"/>
-    <rect x="340" y="430" width="40" height="40" fill="#574e37"/>
-    <rect x="460" y="430" width="40" height="40" fill="#574e37"/>
-
-    <!-- Long walls -->
-    <polygon points="740,500 936,500 936,720 770,720 770,760 700,760 700,720 740,720"/>
-    <polygon points="620,420 700,420 700,520 620,520"/>
-    <polygon points="620,800 700,760 770,760 820,820 700,850 600,840 556,800"/>
-    <polygon points="820,820 900,820 820,872 740,872"/>
-
-    <!-- T spawn blocks -->
-    <polygon points="0,872 150,872 150,940 80,1024 0,1024"/>
-    <polygon points="250,880 470,880 470,940 250,980"/>
-    <polygon points="470,880 600,840 620,900 500,980 470,940"/>
-    <polygon points="80,1024 250,980 250,1024"/>
-    <polygon points="250,980 470,940 470,1024"/>
-    <polygon points="470,1024 500,980 620,900 700,940 740,1024"/>
-
-    <!-- Tunnels west mass -->
-    <polygon points="0,276 56,348 90,400 0,400"/>
-    <polygon points="0,400 90,400 150,400 150,470 56,470 0,520"/>
-    <polygon points="0,520 56,470 112,470 112,872 56,840 0,760"/>
-    <polygon points="0,760 56,840 150,872 80,940 0,872"/>
+    <polygon points="548,128 696,128 704,292 560,292 516,232"/>
+    <!-- ninja pocket -->
+    <rect x="612" y="84" width="96" height="48" rx="6"/>
+    <!-- A small belt (CT down to cat) -->
+    <polygon points="560,292 706,292 722,472 600,472 536,396"/>
+    <!-- cat / short -->
+    <polygon points="514,472 612,472 612,636 514,636"/>
+    <!-- A site -->
+    <polygon points="748,108 884,108 906,244 772,252 716,196"/>
+    <!-- A ramp + long A strip -->
+    <polygon points="868,136 976,150 984,524 852,524 856,240"/>
+    <!-- A doors hall -->
+    <polygon points="668,520 804,520 804,642 656,642"/>
+    <!-- long bottom connector -->
+    <polygon points="514,636 656,636 692,736 816,736 816,812 690,792 566,700"/>
+    <!-- pit -->
+    <polygon points="812,556 984,556 994,724 836,724 812,656"/>
+    <!-- lower right / tire area -->
+    <polygon points="616,824 816,824 800,960 636,960"/>
   </g>
 
-  <!-- ===== site floors + site letters ===== -->
-  <polygon points="120,120 400,120 400,300 250,330 120,320" fill="rgba(210,180,150,.35)"/>
-  <polygon points="640,96 936,96 936,236 860,300 740,300 640,220" fill="rgba(214,180,130,.35)"/>
-  <text class="site siteB" x="356" y="250">B</text>
-  <text class="site siteA" x="668" y="130">A</text>
+  <!-- ===== building props ===== -->
+  <g class="blk">
+    <!-- B site boxes -->
+    <rect x="176" y="120" width="46" height="40" rx="3"/>
+    <rect x="186" y="176" width="60" height="34" rx="3"/>
+    <rect x="262" y="126" width="24" height="24" rx="2"/>
+    <!-- white car -->
+    <polygon points="180,300 226,296 236,330 188,338"/>
+    <!-- truck -->
+    <polygon points="428,150 482,146 488,178 432,182"/>
+    <!-- xbox -->
+    <rect x="452" y="398" width="30" height="26" rx="2"/>
+    <!-- B2 box + stairs -->
+    <rect x="250" y="452" width="54" height="34" rx="3"/>
+    <polygon points="296,470 330,470 330,506 296,506"/>
+    <!-- mid doors mass hint -->
+    <rect x="498" y="356" width="16" height="72" fill="#4f6066"/>
 
-  <!-- a few signature props -->
-  <g class="prop">
-    <rect x="180" y="200" width="70" height="46"/>
-    <rect x="276" y="190" width="46" height="36"/>
-    <polygon points="700,140 756,130 766,180 710,192"/>
-    <rect x="792" y="140" width="52" height="38"/>
-    <rect x="852" y="196" width="46" height="46"/>
-    <rect x="392" y="560" width="46" height="36"/>
+    <!-- CT / ninja -->
+    <rect x="560" y="150" width="40" height="30" rx="2"/>
+    <!-- A site boxes -->
+    <polygon points="760,150 812,140 822,184 770,194"/>
+    <rect x="828" y="140" width="34" height="28" rx="2"/>
+    <rect x="836" y="196" width="34" height="34" rx="2"/>
+    <rect x="700" y="178" width="30" height="26" rx="2"/>
+    <!-- blue box long -->
+    <rect x="712" y="486" width="52" height="30" rx="2"/>
+    <!-- blue car pit/long -->
+    <polygon points="916,252 960,246 966,296 922,302"/>
+    <!-- yellow car -->
+    <polygon points="676,756 720,752 728,796 682,802"/>
   </g>
 
-  <!-- ===== embedded callouts ===== -->
+  <!-- spawn boxes (dashed, like classic radar) -->
+  <rect x="556" y="134" width="136" height="150" rx="4" fill="none" stroke="#7fd66f" stroke-width="2.5" stroke-dasharray="9 7" opacity=".75"/>
+  <rect x="302" y="934" width="196" height="84" rx="4" fill="none" stroke="#7fd66f" stroke-width="2.5" stroke-dasharray="9 7" opacity=".75"/>
+
+  <!-- fog vignette -->
+  <rect width="1024" height="1024" fill="url(#fog)"/>
+
+  <!-- ===== callouts ===== -->
   <g text-anchor="middle">
-    <text class="ct" x="536" y="248">CT SPAWN</text>
-    <text class="t"  x="372" y="868">T SPAWN</text>
+    <text class="spawn" x="624" y="216">警 家</text>
+    <text class="spawn" x="400" y="984">匪 家</text>
+    <text class="site siteB" x="206" y="166">B</text>
+    <text class="site siteA" x="812" y="192">A</text>
 
-    <text class="cal" x="352" y="362">B DOORS</text>
-    <text class="cal" x="184" y="800">UPPER TUNNELS</text>
-    <text class="cal" x="184" y="610">TUNNELS</text>
+    <text class="cal2" x="102" y="64">狙位</text>
+    <text class="cal2" x="800" y="62">狙位</text>
+    <text class="cal2" x="196" y="118">矮箱 高箱</text>
+    <text class="cal2" x="292" y="118">死点</text>
+    <text class="cal2" x="356" y="110">狗洞 脚手架</text>
+    <text class="cal2" x="392" y="200">沙地</text>
+    <text class="cal2" x="252" y="252">B 门</text>
+    <text class="cal2" x="320" y="282">B 外箱子</text>
+    <text class="cal2" x="206" y="322">白车</text>
+    <text class="cal2" x="92" y="240">假门</text>
+    <text class="cal2" x="92" y="328">B 通左右手</text>
+    <text class="cal2" x="120" y="372">B 洞</text>
+    <text class="cal2" x="92" y="486">B2 死点</text>
+    <text class="cal2" x="150" y="500">B2</text>
+    <text class="cal2" x="286" y="500">B2 箱子</text>
+    <text class="cal2" x="352" y="400">B1</text>
+    <text class="cal2" x="186" y="740">后花园</text>
+    <text class="cal2" x="120" y="872">后花园斜坡</text>
+    <text class="cal2" x="236" y="908">后花园平台</text>
 
-    <text class="cal" x="884" y="330">LONG A</text>
-    <text class="cal" x="880" y="404">LONG DOORS</text>
-    <text class="cal" x="664" y="478">PIT</text>
-    <text class="cal" x="800" y="612">LONG</text>
-    <text class="cal" x="678" y="330">SHORT</text>
-    <text class="cal" x="540" y="396">CATWALK</text>
+    <text class="cal2" x="486" y="912">匪斜坡</text>
+    <text class="cal2" x="498" y="772">暗道</text>
+    <text class="cal2" x="392" y="660">L 位</text>
+    <text class="cal2" x="498" y="624">油桶</text>
+    <text class="cal2" x="470" y="548">中路</text>
+    <text class="cal2" x="474" y="414">xbox 箱</text>
+    <text class="cal2" x="486" y="372">中门</text>
+    <text class="cal2" x="492" y="346">中门凹槽</text>
 
-    <text class="cal" x="420" y="466">MID DOORS</text>
-    <text class="cal" x="416" y="624">X-BOX</text>
-    <text class="cal" x="430" y="700">MID</text>
+    <text class="cal2" x="648" y="102">忍者位</text>
+    <text class="cal2" x="712" y="206">A 小双架位</text>
+    <text class="cal2" x="640" y="330">A 小死点</text>
+    <text class="cal2" x="616" y="424">A 小凹槽</text>
+    <text class="cal2" x="628" y="404">A 小</text>
+    <text class="cal2" x="566" y="540">小道</text>
+    <text class="cal2" x="898" y="130">A 斜坡</text>
+    <text class="cal2" x="888" y="424">A 大</text>
+    <text class="cal2" x="936" y="262">蓝车</text>
+    <text class="cal2" x="936" y="322">蓝车死点</text>
+    <text class="cal2" x="880" y="672">大坑</text>
+    <text class="cal2" x="930" y="652">大坑平台</text>
+    <text class="cal2" x="724" y="556">A 门</text>
+    <text class="cal2" x="650" y="686">A 门外拐角</text>
+    <text class="cal2" x="700" y="778">黄车</text>
+    <text class="cal2" x="652" y="930">轮胎位</text>
   </g>
 </svg>

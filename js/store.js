@@ -15,6 +15,7 @@
     maps: {},          // { inferno: n, mirage: n, nuke: n }
     commands: 0,       // 指挥台执行过的命令数
     hotspots: 0,       // 武器部位情报读取次数
+    eggs: 0,           // 战术沙盘点爆的彩蛋球
     deploys: 0,        // 进入部署的次数
     dwellMs: 0,        // 累计活跃时长
     flags: {},         // 一次性观察事件（已触发的系统提示）
@@ -75,7 +76,16 @@
     save();
     return !was;
   }
-  function bumpScans() { data.scans++; saveSoon(); return data.scans; }
+  function bumpScans() {
+    data.scans++;
+    saveSoon();
+    return data.scans;
+  }
+  function bumpEggs() {
+    data.eggs = (data.eggs || 0) + 1;
+    saveSoon();
+    return data.eggs;
+  }
 
   // 一次性事件：首次返回 true，之后 false
   function once(key) {
@@ -154,12 +164,13 @@
     get anomaly() { return !!data.anomaly; },
     get scans() { return data.scans || 0; },
     get commands() { return data.commands || 0; },
+    get eggs() { return data.eggs || 0; },
     get deploys() { return data.deploys || 0; },
     get firstAt() { return data.firstAt; },
     get dwellMs() { return data.dwellMs || 0; },
     touchInspect, countOf, totalInspects,
     touchMap, totalMapTouches, favoriteMap,
-    bumpCommands, bumpHotspots, bumpDeploy,
+    bumpCommands, bumpHotspots, bumpDeploy, bumpEggs,
     unlockAnomaly, bumpScans, once, daysSinceFirst,
     favorite, profile
   };
