@@ -855,18 +855,34 @@ body.loaded .hero-hud{opacity:1}
     linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px) 0 0/44px 44px,
     radial-gradient(80% 60% at 50% 45%,rgba(222,155,53,.06),transparent 70%);
 }
-.insp-rot{position:relative;touch-action:none;cursor:grab;will-change:transform;user-select:none;min-width:0}
-.insp-rot.drag{cursor:grabbing}
-#inspCanvas{display:block;width:100%;max-width:100%;height:auto;animation:inspFloat 6.5s ease-in-out infinite}
-@keyframes inspFloat{50%{transform:translateY(-7px)}}
-.insp-sheen{
-  position:absolute;inset:-10% -30%;pointer-events:none;
-  background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.07) 50%,transparent 58%);
+/* ---------- 3D VIEWER ---------- */
+.v3d{position:relative;flex:1;min-height:0;min-width:0;overflow:hidden;touch-action:none;border-radius:2px}
+.v3d-canvas{display:block;width:100%!important;height:100%!important;cursor:grab}
+.v3d-canvas:active{cursor:grabbing}
+.v3d-hots{position:absolute;inset:0;pointer-events:none;z-index:3}
+.v3d-loading{
+  position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;gap:16px;
+  align-items:center;justify-content:center;
+  background:rgba(10,12,16,.82);font-family:var(--font-mono);font-size:.66rem;
+  letter-spacing:.24em;color:var(--accent-2);
 }
-.insp-hots{position:absolute;inset:0;transition:opacity .3s}
+.v3d:not(.loading) .v3d-loading{display:none}
+.v3d.failed .v3d-loading{display:none}
+.v3d-loading i{
+  width:34px;height:34px;border:1px solid var(--line);
+  border-top-color:var(--accent);border-radius:50%;animation:v3spin .8s linear infinite;
+}
+@keyframes v3spin{to{transform:rotate(360deg)}}
+.v3d-fallback{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0b0d11}
+.v3d-fallback[hidden]{display:none}
+.v3d-fallback img{max-width:82%;max-height:72%;object-fit:contain;border:1px solid var(--line);opacity:.85}
+.v3d-fallback p{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.18em;color:var(--dim)}
 .hot{
-  position:absolute;transform:translate(-50%,-50%);padding:12px;background:none;
+  position:absolute;left:0;top:0;visibility:hidden;
+  transform:translate(-50%,-50%);padding:13px;background:none;pointer-events:auto;z-index:2;
 }
+.v3d.view-ready .hot{visibility:visible}
+.hot.back{opacity:.14;pointer-events:none}
 .hot i{
   display:block;width:11px;height:11px;border-radius:50%;
   background:var(--accent);box-shadow:0 0 0 4px rgba(222,155,53,.18),0 0 14px var(--accent-glow);

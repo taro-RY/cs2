@@ -1,0 +1,29 @@
+CT-OS // 3D MODEL CREDITS
+=========================
+All weapon models are sourced from Poly Pizza (https://poly.pizza)
+under Creative Commons Attribution 4.0 International (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+
+1. AK-47  — "Ak47" by AdamKokrito
+   Source: https://poly.pizza/m/5HaOYIsAtE
+   File:   models/ak47.glb
+   Changes: re-centered, scale-normalized, PBR material retouch,
+            edge outline added.
+
+2. M4 platform (M4A4 / M4A1-S) — "M4 Carbine" by AdamKokrito
+   Source: https://poly.pizza/m/vx8dQfkzNM
+   File:   models/m4a4.glb
+   Changes: re-centered, scale-normalized, PBR material retouch,
+            edge outline added; M4A1-S variant adds a procedurally
+            generated suppressor; M4A4 adds a procedural flash hider.
+
+3. Molotov — "Molotov" by CreativeTrio
+   Source: https://poly.pizza/m/jsmWZYqVlM
+   File:   models/molotov.glb
+   Changes: re-centered, scale-normalized, edge outline added.
+
+Engine: Three.js (MIT) — r160, self-hosted under vendor/.
+https://github.com/mrdoob/three.js
+
+This is a fan-made conceptual showcase. Weapon shapes are general
+firearm designs; no Valve/Counter-Strike proprietary assets are used.

@@ -10,6 +10,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "./assets/vendor/three.module.js",
+  "three/addons/": "./assets/vendor/"
+}}
+</script>
 </head>
 <body class="booting">
 
@@ -482,7 +488,7 @@
       </div>
       <div class="footer-bottom reveal" data-delay="2">
         <span>© 2026 CONCEPT SHOWCASE · FOR DEMONSTRATION ONLY</span>
-        <span>DESIGNED WITH PRECISION — ENGINEERED FOR VICTORY</span>
+        <span>3D MODELS: AK-47 / M4 BY ADAMKOKRITO · MOLOTOV BY CREATIVETRIO — CC BY 4.0 (POLY.PIZZA)</span>
       </div>
     </div>
   </section>
@@ -513,12 +519,12 @@
     </header>
     <div class="insp-body">
       <div class="insp-stage">
-        <div class="insp-rot" id="inspRot">
-          <canvas id="inspCanvas" aria-label="武器检视画布"></canvas>
-          <div class="insp-sheen" id="inspSheen"></div>
-          <div class="insp-hots" id="inspHots"></div>
+        <div class="v3d" id="viewer3d">
+          <div class="v3d-hots" id="inspHots"></div>
+          <div class="v3d-loading"><i></i><span>LOADING SCHEMATIC …</span></div>
+          <div class="v3d-fallback" id="v3dFallback" hidden></div>
         </div>
-        <p class="insp-drag">↔ 按住拖拽旋转检视 · 点击金色节点读取部位情报</p>
+        <p class="insp-drag">↔ 拖拽旋转（带惯性） · 滚轮 / 双指缩放 · 点击金色节点局部聚焦</p>
       </div>
       <aside class="insp-panel">
         <div class="insp-tabs" id="inspTabs"></div>
@@ -570,5 +576,6 @@
 <script src="js/anomaly.js"></script>
 <script src="js/mapos.js"></script>
 <script src="js/main.js"></script>
+<script type="module" src="js/viewer3d.js"></script>
 </body>
 </html>

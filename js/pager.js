@@ -167,9 +167,6 @@
       if (dy < 0 && canDown) return;
       if (dy > 0 && canUp) return;
     }
-    // 在地图轨道上横向滑动 → 交给轨道自身，不切场景
-    const onRail = e.composedPath().some(el => el.id === 'mapRail');
-    if (onRail && Math.abs(dx) > Math.abs(dy)) return;
     // 在喷涂墙上滑动 → 手势全部留给喷涂互动
     const onSpray = e.composedPath().some(el => el.id === 'sprayCanvas');
     if (onSpray) return;
