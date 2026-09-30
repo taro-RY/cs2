@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COUNTER-STRIKE 2 — 次世代战术射击</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2308090b'/%3E%3Ctext x='16' y='23' font-family='Arial,sans-serif' font-weight='bold' font-size='19' text-anchor='middle' fill='%23de9b35'%3EC%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Counter-Strike 2 概念展示页 — Source 2 引擎驱动的次世代战术射击体验">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="booting">
+
+<!-- ================= CT-OS BOOT ================= -->
+<div class="boot" id="boot">
+  <div class="boot-scan"></div>
+  <div class="boot-inner">
+    <div class="boot-brand">CT-OS <em>v2.6.0</em> // TACTICAL OPERATING SYSTEM</div>
+    <div class="boot-log" id="bootLog"></div>
+    <div class="boot-menu" id="bootMenu" hidden>
+      <p class="boot-id" id="bootId"></p>
+      <div class="bm-grid">
+        <button class="bm-item" type="button" data-go="0"><b>01</b><span><strong>开始部署</strong><em>DEPLOY</em></span><i>►</i></button>
+        <button class="bm-item" type="button" data-go="2"><b>02</b><span><strong>装备检视</strong><em>INSPECT LOADOUT</em></span><i>►</i></button>
+        <button class="bm-item" type="button" data-go="3"><b>03</b><span><strong>作战数据</strong><em>RECORDS</em></span><i>►</i></button>
+        <button class="bm-item" type="button" data-go="4"><b>04</b><span><strong>进入战场</strong><em>DEPLOY MAP</em></span><i>►</i></button>
+      </div>
+      <p class="boot-hint">数字键 1-4 快速选择 · <b>CTRL + K</b> 随时呼出指挥台 · 点击任意处跳过</p>
+    </div>
+  </div>
+  <div class="boot-bar"><i id="bootBar"></i></div>
+</div>
+
+<!-- fixed atmosphere layers -->
+<div class="grain"></div>
+<div class="vignette"></div>
+<canvas id="particles"></canvas>
+
+<!-- cinematic letterbox bars during space switches -->
+<div class="cinebar cinebar-t"></div>
+<div class="cinebar cinebar-b"></div>
+
+<!-- scene progress + pager controls -->
+<div class="progress" id="progress"></div>
+<div class="cursor" id="cursor"><span class="ring"></span><span class="dot"></span></div>
+
+<!-- ================= NAV ================= -->
+<header class="nav" id="nav">
+  <a class="logo" href="#scene-home" data-goto="0"><span class="mark">C</span>COUNTER<em>-STRIKE</em></a>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#scene-home" data-goto="0">概览</a></li>
+      <li><a href="#scene-engine" data-goto="1">引擎</a></li>
+      <li><a href="#scene-arsenal" data-goto="2">武器库</a></li>
+      <li><a href="#scene-manifesto" data-goto="3">数据</a></li>
+      <li><a href="#scene-maps" data-goto="4">战场</a></li>
+      <li><a href="#scene-spray" data-goto="5">喷涂</a></li>
+      <li><a href="#scene-cta" data-goto="6">参战</a></li>
+    </ul>
+  </nav>
+  <div class="nav-cta">
+    <button class="nav-console" id="navConsole" type="button"><span class="nc-k">CTRL</span>K</button>
+    <span class="nav-status"><span class="dot"></span>SPACE-TO-SPACE MODE</span>
+    <a href="#scene-cta" class="btn btn-primary" data-goto="6" style="padding:12px 26px">立即参战</a>
+    <button class="burger" id="burger" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mm-console" id="mobileConsole" type="button">▸ 指挥台 · CTRL K</button>
+  <a href="#scene-home" data-goto="0">概览</a>
+  <a href="#scene-engine" data-goto="1">引擎</a>
+  <a href="#scene-arsenal" data-goto="2">武器库</a>
+  <a href="#scene-manifesto" data-goto="3">数据</a>
+  <a href="#scene-maps" data-goto="4">战场</a>
+  <a href="#scene-spray" data-goto="5">喷涂</a>
+  <a href="#scene-cta" data-goto="6">参战</a>
+</div>
+
+<!-- side scene dots -->
+<nav class="side-rail" id="sideRail" aria-label="空间导航">
+  <a href="#scene-home" data-goto="0"><b>01 HOME</b><span></span></a>
+  <a href="#scene-engine" data-goto="1"><b>02 ENGINE</b><span></span></a>
+  <a href="#scene-arsenal" data-goto="2"><b>03 ARSENAL</b><span></span></a>
+  <a href="#scene-manifesto" data-goto="3"><b>04 DATA</b><span></span></a>
+  <a href="#scene-maps" data-goto="4"><b>05 MAPS</b><span></span></a>
+  <a href="#scene-spray" data-goto="5"><b>06 GRAFFITI</b><span></span></a>
+  <a href="#scene-cta" data-goto="6"><b>07 DEPLOY</b><span></span></a>
+  <a href="#scene-footer" data-goto="7"><b>08 INFO</b><span></span></a>
+</nav>
+
+<!-- scene indicator -->
+<div class="scene-hud" id="sceneHud">
+  <span class="sh-index" id="shIndex">01</span>
+  <span class="sh-line"></span>
+  <span class="sh-name" id="shName">HOME</span>
+  <span class="sh-total">/ 08</span>
+</div>
+<div class="pager-hint" id="pagerHint">
+  <span>滚轮 / 方向键 · 切换空间</span>
+  <i class="wheel-ic"><i></i></i>
+</div>
+<div class="pager-arrows" id="pagerArrows">
+  <button id="pgUp" aria-label="上一个空间">↑</button>
+  <button id="pgDown" aria-label="下一个空间">↓</button>
+</div>
+
+<!-- ================= STAGE ================= -->
+<main class="stage" id="stage">
+
+  <!-- ========== SCENE 01 · HERO ========== -->
+  <section class="scene hero" id="scene-home" data-trans="zoom" data-name="HOME">
+    <div class="hero-bg">
+      <img id="heroImg" src="images/hero.jpg" alt="CS2 主视觉">
+    </div>
+    <div class="hero-veil"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-scan"></div>
+    <div class="hero-watermark" id="watermark">CS2</div>
+
+    <div class="hero-hud hud-1">
+      SECTOR <b>A-07</b> // STATUS <b>CLEAR</b><br>
+      POS <b>34.05N / 118.24W</b>
+    </div>
+    <div class="hero-hud hud-2">
+      BUILD <b>2.0.26</b> · ENGINE <b>SOURCE&nbsp;2</b><br>
+      NET <b>SUB-TICK</b> · PING <b id="pingVal">12</b>ms
+    </div>
+
+    <div class="scene-pad hero-inner" id="heroInner">
+      <span class="hero-tag hero-rise"><b>● LIVE</b>&nbsp; SOURCE 2 ENGINE · NEXT-GEN TACTICAL FPS</span>
+      <h1 class="display">
+        <span class="line"><span>COUNTER-</span></span>
+        <span class="line"><span class="l2">STRIKE 2</span></span>
+      </h1>
+      <p class="hero-sub hero-rise">全球攻势 · 次世代已至</p>
+      <p class="hero-desc hero-rise">
+        全面升级的 Source 2 引擎、亚 tick 级响应的网络架构与体积化动态烟雾。
+        每一颗子弹、每一次闪光、每一局博弈，都比以往更加真实致命。
+      </p>
+      <div class="hero-actions hero-rise">
+        <a href="#scene-cta" class="btn btn-primary" data-goto="6" data-magnetic>免费加入战斗 <span class="arr">→</span></a>
+        <a href="#scene-engine" class="btn btn-ghost" data-goto="1" data-magnetic>进入引擎核心</a>
+      </div>
+    </div>
+
+    <div class="hero-bar">
+      <span>BUILD <b>2.0.26</b></span>
+      <span>ENGINE <b>SOURCE 2</b></span>
+      <span class="hl">NETCODE <b>SUB-TICK</b></span>
+      <span>SERVERS <b>128 TICK</b></span>
+      <span>PLAYERS <b id="heroPlayers">1,837,402</b></span>
+    </div>
+  </section>
+
+  <!-- ========== SCENE 02 · ENGINE BENTO ========== -->
+  <section class="scene has-scroll" id="scene-engine" data-trans="push" data-name="ENGINE">
+    <div class="scene-scroll" data-scroll>
+      <div class="scene-pad container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-index">00 — NEXT-GEN ENGINE</p>
+            <h2 class="display section-title"><span class="mask-line"><span>次世代<span class="outline">引擎核心</span></span></span></h2>
+          </div>
+          <p class="section-desc">从渲染管线到网络架构全面重构。不止是一次升级，而是整个战场的重建。</p>
+        </div>
+
+        <div class="bento">
+          <article class="bento-cell bc-lg reveal">
+            <div class="bc-smoke"><i></i><i></i><i></i></div>
+            <div class="bc-content">
+              <div>
+                <p class="bc-idx"><span>FEATURE / 01</span><i>BREAKTHROUGH</i></p>
+                <h3 class="bc-title">体积化<em>动态烟雾</em></h3>
+                <p class="bc-desc">烟雾现在是与环境交互的体积光介质：子弹会撕开孔洞，爆炸会瞬间清空视野，并随光线与气流自然扩散。</p>
+              </div>
+              <span class="bc-tag">VOLUMETRIC RESPONSIVE SMOKE</span>
+            </div>
+          </article>
+
+          <article class="bento-cell bc-sm reveal" data-delay="1">
+            <div class="bc-content">
+              <div>
+                <p class="bc-idx"><span>FEATURE / 02</span><i>NETCODE</i></p>
+                <h3 class="bc-title">SUB-TICK <em>架构</em></h3>
+                <p class="bc-desc">服务器在 tick 之间精确记录移动、射击与投掷的瞬间，你的操作不再受刷新率限制。</p>
+                <div class="bc-wave" id="eqWave"></div>
+              </div>
+              <span class="bc-tag">TICK-RATE INDEPENDENT</span>
+            </div>
+          </article>
+
+          <article class="bento-cell bc-row reveal">
+            <div class="bc-content">
+              <div>
+                <p class="bc-idx"><span>FEATURE / 03</span><i>RENDER</i></p>
+                <h3 class="bc-title">SOURCE <em>2</em></h3>
+                <p class="bc-desc">全新光照、材质与物理渲染。</p>
+              </div>
+              <span class="bc-tag">NEW PIPELINE</span>
+            </div>
+          </article>
+
+          <article class="bento-cell bc-row reveal" data-delay="1">
+            <div class="bc-content">
+              <div>
+                <p class="bc-idx"><span>FEATURE / 04</span><i>SERVERS</i></p>
+                <h3 class="bc-title">128 <em>TICK</em></h3>
+                <p class="bc-desc">官方竞技级服务器架构。</p>
+              </div>
+              <span class="bc-tag">COMPETITION GRADE</span>
+            </div>
+          </article>
+
+          <article class="bento-cell bc-row reveal" data-delay="2">
+            <div class="bc-content">
+              <div>
+                <p class="bc-idx"><span>FEATURE / 05</span><i>VISUALS</i></p>
+                <h3 class="bc-title">高清<em>材质</em></h3>
+                <p class="bc-desc">基于物理的皮肤与地图高清重制。</p>
+              </div>
+              <span class="bc-tag">PBR MATERIALS</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCENE 03 · ARSENAL ========== -->
+  <section class="scene has-scroll" id="scene-arsenal" data-trans="tilt" data-name="ARSENAL">
+    <div class="scene-scroll" data-scroll>
+      <div class="scene-pad container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-index">01 — THE ARSENAL</p>
+            <h2 class="display section-title"><span class="mask-line"><span>尖端<span class="outline">武器库</span></span></span></h2>
+          </div>
+          <p class="section-desc">从主战步枪到战术投掷物，Source 2 的物理渲染让金属、火光与烟雾纤毫毕现。<b>长按任意卡片</b>进入战术检视。</p>
+        </div>
+
+        <div class="cards">
+          <article class="skin-card reveal" data-weapon="ak47" data-glow="rgba(235,75,75,.28)" style="--w:92%;--rarity-color:var(--covert)">
+            <span class="skin-rarity r-covert"></span>
+            <div class="skin-media">
+              <img src="images/w-ak47.jpg" alt="AK-47" loading="lazy" style="object-position:62% 55%">
+            </div>
+            <div class="skin-cat"><span>RIFLE · T 阵营</span><span class="rarity-tag">高威力</span></div>
+            <h3 class="skin-name">AK-47 <em>| 火舌</em></h3>
+            <p class="skin-wear">突击步枪 · 一枪破盔</p>
+            <div class="skin-float">
+              <div class="lbl"><span>POWER / 火力压制</span><b>92</b></div>
+              <div class="float-track"><span class="float-fill"></span></div>
+            </div>
+            <div class="skin-foot">
+              <div class="skin-price"><span class="cur">EQUIP COST</span><span class="val">$ 2,500</span></div>
+              <button class="skin-btn">装备 EQUIP</button>
+            </div>
+          </article>
+
+          <article class="skin-card reveal" data-delay="1" data-weapon="m4a1s" data-glow="rgba(126,200,255,.28)" style="--w:88%;--rarity-color:#7ec8ff">
+            <span class="skin-rarity r-spec"></span>
+            <div class="skin-media">
+              <img src="images/w-m4a1s.jpg" alt="M4A1-S" loading="lazy" style="object-position:55% 50%">
+            </div>
+            <div class="skin-cat"><span>CARBINE · CT 阵营</span><span class="rarity-tag">高精度</span></div>
+            <h3 class="skin-name">M4A1-S <em>| 静默</em></h3>
+            <p class="skin-wear">消音卡宾 · 后座可控</p>
+            <div class="skin-float">
+              <div class="lbl"><span>CONTROL / 弹道控制</span><b>88</b></div>
+              <div class="float-track"><span class="float-fill"></span></div>
+            </div>
+            <div class="skin-foot">
+              <div class="skin-price"><span class="cur">EQUIP COST</span><span class="val">$ 2,900</span></div>
+              <button class="skin-btn">装备 EQUIP</button>
+            </div>
+          </article>
+
+          <article class="skin-card reveal" data-delay="2" data-weapon="m4a4" data-glow="rgba(211,44,230,.26)" style="--w:90%;--rarity-color:var(--classified)">
+            <span class="skin-rarity r-classified"></span>
+            <div class="skin-media">
+              <img src="images/w-m4a4.jpg" alt="M4A4" loading="lazy" style="object-position:66% 62%">
+            </div>
+            <div class="skin-cat"><span>CARBINE · CT 阵营</span><span class="rarity-tag">高射速</span></div>
+            <h3 class="skin-name">M4A4 <em>| 巷战</em></h3>
+            <p class="skin-wear">突击卡宾 · 弹幕压制</p>
+            <div class="skin-float">
+              <div class="lbl"><span>FIRE RATE / 射速</span><b>90</b></div>
+              <div class="float-track"><span class="float-fill"></span></div>
+            </div>
+            <div class="skin-foot">
+              <div class="skin-price"><span class="cur">EQUIP COST</span><span class="val">$ 3,100</span></div>
+              <button class="skin-btn">装备 EQUIP</button>
+            </div>
+          </article>
+
+          <article class="skin-card reveal" data-delay="3" data-weapon="molotov" data-glow="rgba(255,174,57,.32)" style="--w:95%;--rarity-color:var(--rare)">
+            <span class="skin-rarity r-rare"></span>
+            <div class="skin-media">
+              <img src="images/w-molotov.jpg" alt="燃烧瓶" loading="lazy" style="object-position:55% 42%">
+            </div>
+            <div class="skin-cat"><span>UTILITY · 投掷物</span><span class="rarity-tag">范围伤害</span></div>
+            <h3 class="skin-name">燃烧瓶 <em>| 炼狱</em></h3>
+            <p class="skin-wear">区域封锁 · 逼敌走位</p>
+            <div class="skin-float">
+              <div class="lbl"><span>AREA DENIAL / 压制</span><b>95</b></div>
+              <div class="float-track"><span class="float-fill"></span></div>
+            </div>
+            <div class="skin-foot">
+              <div class="skin-price"><span class="cur">EQUIP COST</span><span class="val">$ 400</span></div>
+              <button class="skin-btn">装备 EQUIP</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCENE 04 · MANIFESTO + STATS ========== -->
+  <section class="scene manifesto" id="scene-manifesto" data-trans="zoom" data-name="DATA">
+    <div class="stats-bg">
+      <img id="statsImg" src="images/stat-bg.jpg" alt="">
+    </div>
+    <div class="scene-pad mf-inner">
+      <div class="mf-words">
+        <p class="mf-word reveal">PRECISION <em>精准</em></p>
+        <p class="mf-word reveal" data-delay="1">TACTICS <em>战术</em></p>
+        <p class="mf-word reveal" data-delay="2">VICTORY <em>胜利</em></p>
+        <p class="mf-word reveal" data-delay="3">LEGACY <em>传承</em></p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat reveal">
+          <span class="idx">/ 01</span>
+          <div class="num"><span data-count="180">0</span><span>万+</span></div>
+          <div class="cap">Peak Players · 峰值在线</div>
+        </div>
+        <div class="stat reveal" data-delay="1">
+          <span class="idx">/ 02</span>
+          <div class="num"><span data-count="9">0</span></div>
+          <div class="cap">Active Duty Maps · 现役地图</div>
+        </div>
+        <div class="stat reveal" data-delay="2">
+          <span class="idx">/ 03</span>
+          <div class="num"><span data-count="400">0</span><span>+</span></div>
+          <div class="cap">Pro Tournaments · 职业赛事</div>
+        </div>
+        <div class="stat reveal" data-delay="3">
+          <span class="idx">/ 04</span>
+          <div class="num"><span data-count="27">0</span><span>年</span></div>
+          <div class="cap">Legacy · 电竞传承</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCENE 05 · MAPS RAIL ========== -->
+  <section class="scene maps-scene" id="scene-maps" data-trans="push" data-name="MAPS">
+    <div class="scene-pad maps-wrap">
+      <div class="maps-head reveal">
+        <div>
+          <p class="section-index">02 — ACTIVE DUTY</p>
+          <h2 class="display section-title"><span class="mask-line"><span>全球<span class="outline">战场</span></span></span></h2>
+        </div>
+        <div class="rail-tools">
+          <span class="rail-count"><b id="railCur">01</b> / 04</span>
+          <button class="rail-btn" id="railPrev" aria-label="上一张">←</button>
+          <button class="rail-btn" id="railNext" aria-label="下一张">→</button>
+        </div>
+      </div>
+
+      <div class="map-rail no-scrollbar" id="mapRail">
+        <a class="map-card reveal" href="#scene-cta" data-goto="6">
+          <img src="images/map-inferno.jpg" alt="Inferno 炼狱小镇" loading="lazy">
+          <div class="map-veil"></div>
+          <span class="map-hoverline"></span>
+          <span class="map-corner mc-tl"></span><span class="map-corner mc-br"></span>
+          <div class="map-info">
+            <p class="map-code">DE_INFERNO // 01</p>
+            <h3 class="map-name">炼狱小镇</h3>
+            <p class="map-loc">Italy · 爆破模式</p>
+          </div>
+        </a>
+
+        <a class="map-card reveal" data-delay="1" href="#scene-cta" data-goto="6">
+          <img src="images/map-mirage.jpg" alt="Mirage 荒漠迷城" loading="lazy">
+          <div class="map-veil"></div>
+          <span class="map-hoverline"></span>
+          <span class="map-corner mc-tl"></span><span class="map-corner mc-br"></span>
+          <div class="map-info">
+            <p class="map-code">DE_MIRAGE // 02</p>
+            <h3 class="map-name">荒漠迷城</h3>
+            <p class="map-loc">Morocco · 爆破模式</p>
+          </div>
+        </a>
+
+        <a class="map-card reveal" data-delay="2" href="#scene-cta" data-goto="6">
+          <img src="images/map-nuke.jpg" alt="Nuke 核子危机" loading="lazy">
+          <div class="map-veil"></div>
+          <span class="map-hoverline"></span>
+          <span class="map-corner mc-tl"></span><span class="map-corner mc-br"></span>
+          <div class="map-info">
+            <p class="map-code">DE_NUKE // 03</p>
+            <h3 class="map-name">核子危机</h3>
+            <p class="map-loc">Germany · 爆破模式</p>
+          </div>
+        </a>
+
+        <a class="map-card map-more reveal" data-delay="3" href="#scene-cta" data-goto="6">
+          <div>
+            <p class="mm-code">ACTIVE DUTY GROUP // 04</p>
+            <h3>查看全部<br><em>战场地图</em></h3>
+            <span class="mm-go">→</span>
+          </div>
+        </a>
+      </div>
+      <p class="rail-hint">← 横向拖拽浏览战场 · 滚轮上下切换空间 →</p>
+    </div>
+  </section>
+
+  <!-- ========== SCENE 06 · GRAFFITI WALL ========== -->
+  <section class="scene graffiti-scene" id="scene-spray" data-trans="tilt" data-name="GRAFFITI">
+    <canvas id="sprayCanvas" aria-label="互动喷涂墙"></canvas>
+    <div class="scene-pad spray-overlay">
+      <div class="reveal">
+        <p class="section-index">SPOT 06 — LEAVE YOUR MARK</p>
+        <h2 class="display spray-title">墙面<span class="outline">留痕</span></h2>
+        <p class="spray-desc">每一面墙都记得这里发生过什么。<br>移动鼠标或手指掠过墙面，喷上属于你的战术标记。</p>
+      </div>
+      <div class="spray-foot reveal" data-delay="2">
+        <span class="spray-hint">MOVE TO SPRAY · 移动喷涂</span>
+        <span class="spray-count">已留下 <b id="sprayCount">0</b> 处标记</span>
+        <button class="spray-reset" id="sprayReset">↺ 重新刷墙 RESET</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCENE 07 · CTA ========== -->
+  <section class="scene cta" id="scene-cta" data-trans="zoom" data-name="DEPLOY">
+    <div class="cta-bg">
+      <img id="ctaImg" src="images/cta.jpg" alt="">
+    </div>
+    <canvas class="cta-radar" id="radar" width="560" height="560" aria-hidden="true"></canvas>
+    <div class="scene-pad cta-inner">
+      <span class="kicker reveal" style="justify-content:center">READY UP · 集结待命</span>
+      <h2 class="display reveal" data-delay="1">YOUR <span class="glow">MOVE</span></h2>
+      <p class="cn reveal" data-delay="2">你的回合 · 全世界都在等待</p>
+      <div class="hero-actions reveal" data-delay="3" style="justify-content:center">
+        <a href="#scene-home" class="btn btn-primary" data-goto="0" data-magnetic>回到起点 <span class="arr">↺</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCENE 08 · FOOTER ========== -->
+  <section class="scene footer-scene" id="scene-footer" data-trans="push" data-name="INFO">
+    <div class="scene-pad footer-inner">
+      <div class="footer-brand-center reveal">
+        <a class="logo" href="#scene-home" data-goto="0" style="justify-content:center"><span class="mark">C</span>COUNTER<em>-STRIKE</em></a>
+        <p>这是一个粉丝向概念展示页面。Counter-Strike 是 Valve Corporation 的注册商标。</p>
+      </div>
+      <div class="footer-cols reveal" data-delay="1">
+        <div class="footer-col">
+          <h4>Game</h4>
+          <ul>
+            <li><a href="#scene-arsenal" data-goto="2">武器库</a></li>
+            <li><a href="#scene-maps" data-goto="4">战场地图</a></li>
+            <li><a href="#scene-manifesto" data-goto="3">游戏数据</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="#scene-cta" data-goto="6">职业赛事</a></li>
+            <li><a href="#scene-cta" data-goto="6">创意工坊</a></li>
+            <li><a href="#scene-cta" data-goto="6">玩家社区</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#scene-cta" data-goto="6">系统需求</a></li>
+            <li><a href="#scene-cta" data-goto="6">反作弊</a></li>
+            <li><a href="#scene-cta" data-goto="6">联系我们</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-secret reveal" data-delay="2">
+        <button class="donotopen" id="doNotOpen" type="button">[ DO NOT OPEN ]</button>
+      </div>
+      <div class="footer-bottom reveal" data-delay="2">
+        <span>© 2026 CONCEPT SHOWCASE · FOR DEMONSTRATION ONLY</span>
+        <span>DESIGNED WITH PRECISION — ENGINEERED FOR VICTORY</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= CT-OS COMMAND PALETTE ================= -->
+<div class="palette" id="palette" aria-hidden="true">
+  <div class="pal-backdrop" data-pal-close></div>
+  <div class="pal-window" role="dialog" aria-label="CT-OS 指挥台">
+    <div class="pal-top"><span>CT-OS COMMAND LINE</span><span class="pal-esc">ESC</span></div>
+    <div class="pal-out" id="palOut"></div>
+    <div class="pal-list" id="palList"></div>
+    <div class="pal-row"><span class="pal-prompt">&gt;</span><input id="palInput" type="text" autocomplete="off" spellcheck="false" placeholder="输入 help 查看命令，例如 inspect ak47"></div>
+  </div>
+</div>
+
+<!-- ================= WEAPON INSPECTION ================= -->
+<div class="inspect" id="inspect" aria-hidden="true">
+  <div class="insp-backdrop" data-insp-close></div>
+  <div class="insp-window" role="dialog" aria-label="武器战术检视">
+    <header class="insp-head">
+      <div class="insp-id"><span class="insp-code" id="inspCode"></span><h3 id="inspName"></h3></div>
+      <button class="insp-close" id="inspClose" type="button">✕ ESC</button>
+    </header>
+    <div class="insp-body">
+      <div class="insp-stage">
+        <div class="insp-rot" id="inspRot">
+          <canvas id="inspCanvas" aria-label="武器检视画布"></canvas>
+          <div class="insp-sheen" id="inspSheen"></div>
+          <div class="insp-hots" id="inspHots"></div>
+        </div>
+        <p class="insp-drag">↔ 按住拖拽旋转检视 · 点击金色节点读取部位情报</p>
+      </div>
+      <aside class="insp-panel">
+        <div class="insp-tabs" id="inspTabs"></div>
+        <div class="insp-info" id="inspInfo"><b>STANDBY · 待命</b><span>点击武器上的金色节点，读取该部位的战术情报。</span></div>
+        <div class="insp-stats" id="inspStats"></div>
+        <div class="insp-price"><span>EQUIP COST</span><b id="inspPrice"></b></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ANOMALY / SCAN / TOAST ================= -->
+<div class="glitchfx" id="glitchFx" aria-hidden="true"><div class="gl-box" id="glBox"></div></div>
+<div class="scanfx" id="scanFx" aria-hidden="true"><span class="scan-line"></span><span class="scan-tag">◉ TRACKING</span></div>
+<div class="toasts" id="toasts"></div>
+
+<script src="js/cursor.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/spray.js"></script>
+<script src="js/pager.js"></script>
+<script src="js/store.js"></script>
+<script src="js/inspect.js"></script>
+<script src="js/boot.js"></script>
+<script src="js/terminal.js"></script>
+<script src="js/anomaly.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
