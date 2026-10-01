@@ -857,8 +857,7 @@ body.loaded .hero-hud{opacity:1}
 }
 /* ---------- 3D VIEWER ---------- */
 .v3d{position:relative;flex:1;min-height:0;min-width:0;overflow:hidden;touch-action:none;border-radius:2px}
-.v3d-canvas{display:block;width:100%!important;height:100%!important;cursor:grab}
-.v3d-canvas:active{cursor:grabbing}
+.v3d-canvas{display:block;width:100%!important;height:100%!important}
 .v3d-hots{position:absolute;inset:0;pointer-events:none;z-index:3}
 .v3d-loading{
   position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;gap:16px;
@@ -1123,7 +1122,7 @@ body.loaded .hero-hud{opacity:1}
 .mapops{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 316px;gap:16px}
 .mapops-stage{position:relative;border:1px solid var(--line-strong);overflow:hidden;
   background:radial-gradient(ellipse at 50% 40%,rgba(222,155,53,.06),rgba(8,9,11,.9));min-height:0}
-.mapops-stage canvas{display:block;touch-action:none;cursor:grab}
+.mapops-stage canvas{display:block;touch-action:none}
 .mapops-corner{position:absolute;width:18px;height:18px;border-color:var(--accent);border-style:solid;opacity:.7;z-index:2}
 .mc-a{top:10px;left:10px;border-width:1px 0 0 1px}
 .mc-b{bottom:10px;right:10px;border-width:0 1px 1px 0}
@@ -1251,3 +1250,16 @@ body.loaded .hero-hud{opacity:1}
   .mp-actions{position:static;margin-top:10px}
   #scene-maps .pager-arrows{display:none}
 }
+
+/* ============================================================
+   GLOBAL FLOATING ORBS — 全局漂浮彩蛋球覆盖层
+   ============================================================ */
+.orb-layer{
+  position:fixed;inset:0;z-index:60;pointer-events:none;
+  transition:opacity .4s;
+}
+.orb-layer.hide{opacity:0}
+/* 画布始终穿透；点击由 orbs.js 在 window 捕获阶段按坐标判定 */
+#orbCanvas{pointer-events:none}
+/* 悬停彩蛋球时准星放大反馈 */
+body.orb-hot #cursor .ring{border-color:var(--accent-2)}

@@ -111,84 +111,6 @@
   ];
   const UTIL_STYLE = { smoke:{color:SMOKE,label:'SMOKE'}, flash:{color:'#ffe9a8',label:'FLASH'}, fire:{color:FIRE,label:'MOLLY'} };
 
-  /* ---------------- 漂浮彩蛋球 ---------------- */
-  const EGG_LINES = [
-    'RUSH B！别问，问就是 P90',
-    '这颗闪光，白给的是队友',
-    '经济局：ECO 的事，能叫穷吗',
-    '1v5 残局，梦里什么都有',
-    '静步！我听到你心跳了',
-    'A 大已经被我一个人包了（假的）',
-    '投掷物 +1，枪法 -100',
-    '保枪！这把经济最重要',
-    '预瞄的尽头是玄学',
-    '狗洞一钻，谁也不爱',
-    '你点的不是球，是我的神经',
-    '烟雾散去的那一刻，建议切刀跑'
-  ];
-  const BALL_N = 6;
-  let balls = [];
-  let particles = [];
-
-  function seedBalls() {
-    balls = [];
-    for (let i = 0; i < BALL_N; i++) {
-      balls.push(makeBall(i, false));
-    }
-  }
-  function makeBall(i, respawn) {
-    // 散布在通道沿线
-    const spots = [[.46,.5],[.72,.40],[.22,.38],[.60,.24],[.40,.78],[.80,.60],[.30,.60],[.86,.30]];
-    const s = spots[(i + (respawn ? 3 : 0)) % spots.length];
-    return {
-      x: s[0] + (Math.random() - .5) * .05,
-      y: s[1] + (Math.random() - .5) * .05,
-      vx: (Math.random() - .5) * .012,
-      vy: (Math.random() - .5) * .010,
-      phase: Math.random() * Math.PI * 2,
-      r: .016 + Math.random() * .006,
-      alive: true, respawnAt: 0
-    };
-  }
-  function updateBalls(dt, now) {
-    balls.forEach((b, i) => {
-      if (!b.alive) {
-        if (now > b.respawnAt) balls[i] = makeBall(i, true);
-        return;
-      }
-      b.phase += dt;
-      b.x += b.vx * dt; b.y += b.vy * dt + Math.sin(b.phase) * 0.00012;
-      if (b.x < .07 || b.x > .94) b.vx *= -1;
-      if (b.y < .06 || b.y > .95) b.vy *= -1;
-      b.x = Math.max(.07, Math.min(.94, b.x));
-      b.y = Math.max(.06, Math.min(.95, b.y));
-    });
-    particles.forEach(p => {
-      p.age += dt;
-      p.x += p.vx * dt; p.y += p.vy * dt;
-      p.vx *= (1 - 1.8 * dt); p.vy *= (1 - 1.8 * dt);
-    });
-    particles = particles.filter(p => p.age < p.life);
-  }
-  function burstBall(b) {
-    const colors = [GOLD, '#ffc15e', RED, '#ffe9a8', '#ffffff'];
-    for (let i = 0; i < 26; i++) {
-      const a = Math.random() * Math.PI * 2;
-      const sp = .12 + Math.random() * .34;
-      particles.push({
-        x: b.x, y: b.y,
-        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-        age: 0, life: .55 + Math.random() * .5,
-        color: colors[i % colors.length], size: 2 + Math.random() * 3.5
-      });
-    }
-    b.alive = false;
-    b.respawnAt = performance.now() + 12000;
-    const line = EGG_LINES[Math.floor(Math.random() * EGG_LINES.length)];
-    if (window.toast) window.toast('EASTER EGG // ' + line, 'ok');
-    if (window.Store) Store.bumpEggs();
-  }
-
   /* ---------------- 视图状态 ---------------- */
   let W = 0, H = 0, DPR = 1;
   let scale = .9, ox = 0, oy = 0, viewTween = null;
@@ -232,10 +154,6 @@
   }
 
   function draw(now) {
-    const dt = Math.min(.05, (now - (draw._t || now)) / 1000);
-    draw._t = now;
-    updateBalls(dt, now);
-
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = '#0c0e12';
     ctx.fillRect(0, 0, W, H);
@@ -251,11 +169,9 @@
       ctx.setLineDash([]);
     }
 
-    if (hovered && hovered !== selected && !ballAtClient._h) highlightZone(hovered, 'hover');
+    if (hovered && hovered !== selected) highlightZone(hovered, 'hover');
     if (activeRoute) drawRoute(ROUTES[activeRoute], now);
     activeUtils.forEach(id => drawUtility(UTILS.find(u => u.id === id), now));
-    drawParticles();
-    drawBalls(now);
     if (selected) highlightZone(selected, 'select');
   }
 
@@ -352,40 +268,6 @@
     ctx.restore();
   }
 
-  function drawBalls(now) {
-    balls.forEach(b => {
-      if (!b.alive) return;
-      const x = n2x(b.x), y = n2y(b.y);
-      const pulse = 1 + Math.sin(now/320 + b.phase*3) * .22;
-      const rr = b.r * 1024 * scale * pulse;
-      // 外层光环
-      const g = ctx.createRadialGradient(x, y, 0, x, y, rr * 3.2);
-      g.addColorStop(0, 'rgba(222,155,53,.55)');
-      g.addColorStop(.4, 'rgba(222,155,53,.18)');
-      g.addColorStop(1, 'rgba(222,155,53,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(x, y, rr * 3.2, 0, Math.PI*2); ctx.fill();
-      // 核心
-      ctx.fillStyle = '#ffd98a';
-      ctx.shadowColor = GOLD; ctx.shadowBlur = 16;
-      ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI*2); ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(255,255,255,.9)';
-      ctx.beginPath(); ctx.arc(x - rr*.3, y - rr*.3, rr*.32, 0, Math.PI*2); ctx.fill();
-    });
-  }
-  function drawParticles() {
-    particles.forEach(p => {
-      const k = 1 - p.age / p.life;
-      ctx.globalAlpha = Math.max(0, k);
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(n2x(p.x), n2y(p.y), p.size * scale * (0.5 + k), 0, Math.PI*2);
-      ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-  }
-
   function loop(now) {
     if (!rafOn) return;
     requestAnimationFrame(loop);
@@ -429,18 +311,6 @@
   }
 
   /* ---------------- 命中 ---------------- */
-  const ballAtClient = function (clientX, clientY) {
-    const r = cv.getBoundingClientRect();
-    const nx = (clientX - r.left - ox) / (1024 * scale);
-    const ny = (clientY - r.top - oy) / (1024 * scale);
-    for (const b of balls) {
-      if (!b.alive) continue;
-      if (Math.hypot(b.x - nx, b.y - ny) < Math.max(.03, b.r * 2.4)) return b;
-    }
-    return null;
-  };
-  ballAtClient._h = null;
-
   function zoneAt(clientX, clientY) {
     const r = cv.getBoundingClientRect();
     const nx = (clientX - r.left - ox) / (1024 * scale);
@@ -484,7 +354,7 @@
     selected = null;
     elCode.textContent = 'DE_DUST2 // TACTICAL SANDBOX';
     elName.textContent = '选择一个区域';
-    elDesc.textContent = '点击地图上的区域或 A / B 包点查看情报；漂浮的金球可以点炸。';
+    elDesc.textContent = '点击地图上的区域或 A / B 包点查看情报；切换阵营、路线与投掷物进行推演。';
     elList.innerHTML = '<li>状态 <b>SANDBOX READY</b></li><li>地图 <b>DE_DUST2</b></li>';
     elDeploy.disabled = true;
   }
@@ -494,7 +364,6 @@
   cv.addEventListener('pointerdown', e => {
     pdown = true; moved = 0; sx = e.clientX; sy = e.clientY; sox = ox; soy = oy;
     try { cv.setPointerCapture(e.pointerId); } catch (_) {}
-    cv.style.cursor = 'grabbing';
   });
   cv.addEventListener('pointermove', e => {
     if (pdown) {
@@ -504,25 +373,18 @@
       clampView();
       if (moved > 7) viewTween = null;
     } else {
-      const b = ballAtClient(e.clientX, e.clientY);
-      ballAtClient._h = b;
-      hovered = b ? null : zoneAt(e.clientX, e.clientY);
-      cv.style.cursor = b ? 'pointer' : (hovered ? 'pointer' : 'grab');
+      hovered = zoneAt(e.clientX, e.clientY);
     }
   });
   cv.addEventListener('pointerup', e => {
     pdown = false;
     if (moved < 7) {
-      const b = ballAtClient(e.clientX, e.clientY);
-      if (b) { burstBall(b); ballAtClient._h = null; }
-      else {
-        const hit = zoneAt(e.clientX, e.clientY);
-        if (hit) selectZone(hit);
-      }
+      const hit = zoneAt(e.clientX, e.clientY);
+      if (hit) selectZone(hit);
     }
-    cv.style.cursor = 'grab';
   });
   cv.addEventListener('pointercancel', () => { pdown = false; });
+
   cv.addEventListener('wheel', e => {
     e.preventDefault();
     const r = cv.getBoundingClientRect();
@@ -592,7 +454,6 @@
   document.addEventListener('visibilitychange', () => { if (!document.hidden && active) resize(); });
   addEventListener('resize', () => { if (active) resize(); });
 
-  seedBalls();
   bindTools();
   clearPanel();
   window.MapOps = { resize, deploy, resetView };

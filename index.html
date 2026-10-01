@@ -429,6 +429,7 @@
           <p class="mp-code" id="mpCode">DE_DUST2 // TACTICAL SANDBOX</p>
           <h3 class="mp-name" id="mpName">选择一个区域</h3>
           <p class="mp-desc" id="mpDesc">点击地图上的区域或 A / B 包点查看战术情报</p>
+
           <ul class="mp-list" id="mpList"></ul>
           <div class="mp-actions">
             <button class="btn btn-primary mp-deploy" id="mpDeploy" type="button" disabled>部署 DEPLOY <span class="arr">→</span></button>
@@ -570,6 +571,9 @@
   </div>
 </div>
 
+<!-- ================= GLOBAL FLOATING ORBS ================= -->
+<div class="orb-layer" id="orbLayer" aria-hidden="true"></div>
+
 <!-- ================= ANOMALY / SCAN / TOAST ================= -->
 <div class="glitchfx" id="glitchFx" aria-hidden="true"><div class="gl-box" id="glBox"></div></div>
 <div class="scanfx" id="scanFx" aria-hidden="true"><span class="scan-line"></span><span class="scan-tag">◉ TRACKING</span></div>
@@ -609,6 +613,7 @@
 <script src="js/terminal.js"></script>
 <script src="js/anomaly.js"></script>
 <script src="js/mapos.js"></script>
+<script src="js/orbs.js"></script>
 <script src="js/main.js"></script>
 <script type="module" src="js/viewer3d.js"></script>
 </body>
