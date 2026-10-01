@@ -198,9 +198,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 .cursor .ring{
   position:absolute;left:0;top:0;width:30px;height:30px;
-  transition:width .18s var(--ease-out),height .18s var(--ease-out),opacity .2s;
+  border:1px solid rgba(255,255,255,.35);border-radius:50%;
+  transition:width .18s var(--ease-out),height .18s var(--ease-out),opacity .2s,border-color .2s;
   will-change:transform;
 }
+.cursor.hot .ring{border-color:var(--accent-2)}
 .cursor .ring::before,.cursor .ring::after{content:"";position:absolute;background:rgba(255,255,255,.9)}
 .cursor .ring::before{left:50%;top:-6px;width:1px;height:7px;transform:translateX(-50%);box-shadow:0 38px 0 rgba(255,255,255,.9)}
 .cursor .ring::after{top:50%;left:-6px;height:1px;width:7px;transform:translateY(-50%);box-shadow:38px 0 0 rgba(255,255,255,.9)}
