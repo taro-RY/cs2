@@ -11,18 +11,15 @@
   const ring = cursor.querySelector('.ring');
   const dot = cursor.querySelector('.dot');
 
-  let x = -100, y = -100;
-  let vx = 0, vy = 0, px = 0, py = 0;
-  let scale = 1, shown = false;
+  // 初始即在视口中心显示，无需等待第一次移动
+  let x = innerWidth / 2, y = innerHeight / 2;
+  let vx = 0, vy = 0, px = x, py = y;
+  let scale = 1;
+  dot.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`;
+  ring.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`;
 
   document.addEventListener('mousemove', (e) => {
     x = e.clientX; y = e.clientY;
-    if (!shown) {
-      shown = true;
-      cursor.style.opacity = '1';
-      px = x; py = y;
-    }
-    // 瞬时定位：点与环都在当前帧直接到位
     vx = x - px; vy = y - py;
     px = x; py = y;
     const speed = Math.min(Math.hypot(vx, vy) / 60, 1);
@@ -57,4 +54,6 @@
 
   document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
   document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+  // 页面内始终显示
+  cursor.style.opacity = '1';
 })();
