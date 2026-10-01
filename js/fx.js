@@ -13,6 +13,10 @@
     const mouse = { x: -9999, y: -9999 };
     const density = () => Math.min(64, Math.floor(W * H / 30000));
 
+    // 用户偏好：战场微尘开关（设置面板 → AMBIENT DUST）
+    let enabled = window.Store ? !!Store.getSetting('particles', true) : true;
+    let running = false, rafId = 0;
+
     function resize() {
       W = innerWidth; H = innerHeight;
       cv.width = W * DPR; cv.height = H * DPR;
@@ -48,12 +52,27 @@
         ctx.shadowBlur = 6;
         ctx.fill();
       }
-      requestAnimationFrame(frame);
+      rafId = requestAnimationFrame(frame);
     }
+    function start() {
+      if (running || !enabled) return;
+      running = true;
+      rafId = requestAnimationFrame(frame);
+    }
+    function stop() {
+      running = false;
+      cancelAnimationFrame(rafId);
+      ctx.clearRect(0, 0, W, H);
+    }
+    document.addEventListener('ctos:setting', (e) => {
+      if (!e.detail || e.detail.key !== 'particles') return;
+      enabled = !!e.detail.value;
+      if (enabled) start(); else stop();
+    });
     addEventListener('resize', resize);
     if (finePointer) addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
     resize();
-    if (!reduceMotion) frame();
+    if (!reduceMotion) start();
   }
 
   /* ---------- Hero 实时数据 ---------- */

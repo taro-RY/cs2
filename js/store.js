@@ -19,6 +19,7 @@
     deploys: 0,        // 进入部署的次数
     dwellMs: 0,        // 累计活跃时长
     flags: {},         // 一次性观察事件（已触发的系统提示）
+    settings: {},      // 用户偏好（全局样式开关，schema 见 js/settings.js）
     firstAt: Date.now(),
     lastAt: Date.now()
   });
@@ -32,6 +33,7 @@
     data.inspects = data.inspects || {};
     data.maps = data.maps || {};
     data.flags = data.flags || {};
+    data.settings = data.settings || {};
   } catch (e) { data = defaults(); }
 
   // 新一轮部署
@@ -93,6 +95,38 @@
     data.flags[key] = true;
     save();
     return true;
+  }
+
+  /* ---------------- 用户偏好（全局样式开关） ----------------
+     仿 artdesign settingStore：集中默认值 + localStorage 持久化 +
+     变更即广播（document 上的 ctos:setting 事件），各特效层订阅。 */
+  // 启动时用 schema 默认值补齐缺漏的键（不广播）
+  function initSettings(defaults) {
+    let changed = false;
+    Object.keys(defaults || {}).forEach((k) => {
+      if (typeof data.settings[k] === 'undefined') {
+        data.settings[k] = defaults[k];
+        changed = true;
+      }
+    });
+    if (changed) save();
+  }
+  function getSetting(key, fallback) {
+    const v = data.settings ? data.settings[key] : undefined;
+    return typeof v === 'undefined' ? fallback : v;
+  }
+  function setSetting(key, value) {
+    if (!data.settings) data.settings = {};
+    data.settings[key] = value;
+    saveSoon();
+    document.dispatchEvent(new CustomEvent('ctos:setting', { detail: { key, value } }));
+    return value;
+  }
+  function resetSettings(defaults) {
+    data.settings = Object.assign({}, defaults);
+    save();
+    Object.keys(data.settings).forEach((k) =>
+      document.dispatchEvent(new CustomEvent('ctos:setting', { detail: { key: k, value: data.settings[k] } })));
   }
 
   function daysSinceFirst() {
@@ -172,6 +206,7 @@
     touchMap, totalMapTouches, favoriteMap,
     bumpCommands, bumpHotspots, bumpDeploy, bumpEggs,
     unlockAnomaly, bumpScans, once, daysSinceFirst,
-    favorite, profile
+    favorite, profile,
+    initSettings, getSetting, setSetting, resetSettings
   };
 })();

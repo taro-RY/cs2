@@ -87,6 +87,8 @@
 
   // 涂鸦墙场景隐藏
   let hidden = false;
+  // 用户偏好：漂浮球总开关（设置面板 → FLOATING ORBS）
+  let enabled = window.Store ? !!Store.getSetting('orbs', true) : true;
   function setHidden(v) {
     hidden = !!v;
     layer.classList.toggle('hide', hidden);
@@ -99,11 +101,21 @@
       setHidden(spray && spray.dataset.state === 'active');
     }
   });
+  // 订阅全局样式开关
+  document.addEventListener('ctos:setting', e => {
+    if (!e.detail || e.detail.key !== 'orbs') return;
+    enabled = !!e.detail.value;
+    if (!enabled) {
+      ctx.clearRect(0, 0, W, H);
+      hoverBall = null;
+      document.body.classList.remove('orb-hot');
+    }
+  });
 
   let last = performance.now();
   function frame(now) {
     requestAnimationFrame(frame);
-    if (hidden) { last = now; return; }
+    if (hidden || !enabled) { last = now; return; }
     const dt = Math.min(.05, (now - last) / 1000);
     last = now;
 
@@ -160,7 +172,7 @@
 
   // 命中判定（clientX/Y 即视口坐标，与球坐标同系）
   function ballAt(clientX, clientY) {
-    if (hidden) return null;
+    if (hidden || !enabled) return null;
     for (const b of balls) {
       if (b.alive && Math.hypot(b.x - clientX, b.y - clientY) <= b.hitR) return b;
     }
@@ -169,9 +181,9 @@
   function overUI(e) {
     const b = document.body.classList;
     if (b.contains('booting') || b.contains('pal-open') || b.contains('insp-open') ||
-        b.contains('rec-open') || b.contains('glitching')) return true;
+        b.contains('rec-open') || b.contains('glitching') || b.contains('settings-open')) return true;
     return !!(e.target.closest && e.target.closest(
-      '.palette,.inspect,.recover,.glitchfx,.boot,.mapops-panel,.nav-console,.nav-status,.toasts,input,textarea,button,a'
+      '.palette,.inspect,.recover,.glitchfx,.settings,.boot,.mapops-panel,.nav-console,.nav-status,.toasts,input,textarea,button,a'
     ));
   }
   // 画布始终 pointer-events:none，点击在窗口捕获阶段用视口坐标主动判定；

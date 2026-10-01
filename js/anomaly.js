@@ -151,7 +151,9 @@
 
   let scanTimer = 0;
   function triggerScan(y) {
+    // 用户偏好：战术扫描开关（设置面板 → TACTICAL SCAN），关闭时不计扫描信号
     if (reduceMotion) return;
+    if (window.Store && !Store.getSetting('scanfx', true)) { scanCooldown = performance.now() + 1200; return; }
     clearTimeout(scanTimer);
     scanFx.style.top = y + 'px';
     scanFx.classList.add('on');

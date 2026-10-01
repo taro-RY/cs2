@@ -67,6 +67,9 @@
     </ul>
   </nav>
   <div class="nav-cta">
+    <button class="nav-settings" id="navSettings" type="button" aria-label="系统偏好设置" title="系统偏好设置 // PREFERENCES">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
     <button class="nav-console" id="navConsole" type="button"><span class="nc-k">CTRL</span>K</button>
     <span class="nav-status"><span class="dot"></span>SPACE-TO-SPACE MODE</span>
     <a href="#scene-cta" class="btn btn-primary" data-goto="6" style="padding:12px 26px">立即参战</a>
@@ -76,6 +79,7 @@
 
 <div class="mobile-menu" id="mobileMenu">
   <button class="mm-console" id="mobileConsole" type="button">▸ 指挥台 · CTRL K</button>
+  <button class="mm-console mm-settings" id="mobileSettings" type="button">▸ 偏好设置 · PREFERENCES</button>
   <a href="#scene-home" data-goto="0">简报</a>
   <a href="#scene-engine" data-goto="1">系统</a>
   <a href="#scene-arsenal" data-goto="2">装备</a>
@@ -571,6 +575,25 @@
   </div>
 </div>
 
+<!-- ================= SYSTEM PREFERENCES ================= -->
+<div class="settings" id="settings" aria-hidden="true">
+  <div class="set-backdrop" data-set-close></div>
+  <aside class="set-panel" role="dialog" aria-label="系统偏好设置">
+    <header class="set-head">
+      <div>
+        <p class="set-kicker">CT-OS // PREFERENCES</p>
+        <h3>系统偏好设置</h3>
+      </div>
+      <button class="set-close" id="setClose" type="button" data-set-close>✕ ESC</button>
+    </header>
+    <div class="set-body" id="setBody"></div>
+    <footer class="set-foot">
+      <span class="set-saved">// 配置自动持久化至本地终端 LOCAL STORAGE</span>
+      <button class="set-reset" id="setReset" type="button">恢复默认 DEFAULTS</button>
+    </footer>
+  </aside>
+</div>
+
 <!-- ================= GLOBAL FLOATING ORBS ================= -->
 <div class="orb-layer" id="orbLayer" aria-hidden="true"></div>
 
@@ -608,6 +631,7 @@
 <script src="js/spray.js"></script>
 <script src="js/pager.js"></script>
 <script src="js/store.js"></script>
+<script src="js/settings.js"></script>
 <script src="js/inspect.js"></script>
 <script src="js/boot.js"></script>
 <script src="js/terminal.js"></script>

@@ -1263,3 +1263,104 @@ body.loaded .hero-hud{opacity:1}
 #orbCanvas{pointer-events:none}
 /* 悬停彩蛋球时准星放大反馈 */
 body.orb-hot #cursor .ring{border-color:var(--accent-2)}
+
+/* ============================================================
+   SYSTEM PREFERENCES — 全局样式开关（导航齿轮 + 右侧抽屉）
+   ============================================================ */
+.nav-settings{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border:1px solid var(--line-strong);
+  color:var(--muted);background:transparent;transition:.25s;
+}
+.nav-settings svg{width:16px;height:16px;transition:transform .5s var(--ease-out),color .25s}
+.nav-settings:hover{color:var(--accent-2);border-color:var(--accent);box-shadow:0 0 18px -4px var(--accent-glow)}
+.nav-settings:hover svg{transform:rotate(90deg)}
+
+.settings{
+  position:fixed;inset:0;z-index:300;
+  opacity:0;visibility:hidden;transition:opacity .28s var(--ease-out),visibility .28s;
+}
+.settings.open{opacity:1;visibility:visible}
+.set-backdrop{position:absolute;inset:0;background:rgba(5,6,8,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.set-panel{
+  position:absolute;top:0;right:0;height:100%;width:min(390px,92vw);
+  display:flex;flex-direction:column;
+  background:linear-gradient(180deg,rgba(20,22,27,.99),rgba(12,14,17,.99));
+  border-left:1px solid var(--line-strong);
+  box-shadow:-30px 0 90px -30px #000,0 0 0 1px rgba(222,155,53,.08),0 0 60px -30px var(--accent-glow);
+  transform:translateX(100%);
+  transition:transform .34s var(--ease-out);
+}
+.settings.open .set-panel{transform:translateX(0)}
+.set-panel::before,.set-panel::after{
+  content:"";position:absolute;width:14px;height:14px;pointer-events:none;
+}
+.set-panel::before{top:-1px;left:-1px;border-top:1px solid var(--accent);border-left:1px solid var(--accent)}
+.set-panel::after{bottom:-1px;right:0;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent)}
+.set-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+  padding:22px 22px 16px;border-bottom:1px solid var(--line);
+}
+.set-kicker{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.34em;color:var(--accent-2);margin-bottom:8px}
+.set-head h3{font-family:var(--font-display);font-size:1.22rem;text-transform:uppercase;letter-spacing:.06em}
+.set-close{
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.2em;color:var(--muted);
+  border:1px solid var(--line-strong);padding:7px 10px;background:transparent;transition:.25s;
+}
+.set-close:hover{color:var(--accent-2);border-color:var(--accent)}
+.set-body{
+  flex:1;overflow-y:auto;padding:6px 22px 20px;
+  scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent;
+}
+.set-body::-webkit-scrollbar{width:4px}
+.set-body::-webkit-scrollbar-thumb{background:var(--line-strong)}
+.set-group{padding:18px 0 16px;border-bottom:1px solid var(--line)}
+.set-group:last-child{border-bottom:none}
+.set-group-label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.3em;color:var(--dim);margin-bottom:10px}
+.set-row{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;
+  text-align:left;padding:10px 0;background:transparent;
+}
+.sr-text{display:flex;flex-direction:column;gap:3px}
+.sr-text b{font-weight:500;font-size:.88rem;color:var(--text);letter-spacing:.04em;transition:color .2s}
+.sr-text em{font-style:normal;font-family:var(--font-mono);font-size:.54rem;letter-spacing:.22em;color:var(--dim)}
+.set-desc{font-size:.7rem;color:var(--muted);line-height:1.5;margin-top:2px}
+.set-row:hover .sr-text b{color:var(--accent-2)}
+.set-switch{
+  position:relative;flex:0 0 auto;width:42px;height:22px;
+  border:1px solid var(--line-strong);background:rgba(255,255,255,.03);transition:.25s;
+}
+.set-switch i{
+  position:absolute;top:2px;left:2px;width:16px;height:16px;
+  background:var(--muted);transition:transform .25s var(--ease-out),background .25s,box-shadow .25s;
+}
+.set-row:hover .set-switch{border-color:var(--muted)}
+.set-switch.on{border-color:var(--accent);background:rgba(222,155,53,.14);box-shadow:0 0 14px -4px var(--accent-glow)}
+.set-switch.on i{transform:translateX(20px);background:var(--accent-2);box-shadow:0 0 10px var(--accent-glow)}
+.set-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 22px;border-top:1px solid var(--line);
+}
+.set-saved{font-family:var(--font-mono);font-size:.52rem;letter-spacing:.1em;color:var(--dim);line-height:1.6}
+.set-reset{
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;color:var(--muted);
+  border:1px solid var(--line-strong);padding:9px 12px;background:transparent;white-space:nowrap;transition:.25s;
+}
+.set-reset:hover{color:#ff6b6b;border-color:rgba(255,107,107,.6);box-shadow:0 0 16px -6px rgba(255,107,107,.8)}
+
+/* 开关关闭态：body 上的数据属性统一接管（settings.js 写入） */
+body[data-opt-orbs="0"] .orb-layer,
+body[data-opt-particles="0"] #particles,
+body[data-opt-grain="0"] .grain,
+body[data-opt-vignette="0"] .vignette,
+body[data-opt-scanfx="0"] .scanfx{display:none!important}
+@media (pointer:fine){
+  body[data-opt-crosshair="0"] #cursor{display:none!important}
+  body[data-opt-crosshair="0"],
+  body[data-opt-crosshair="0"] a,
+  body[data-opt-crosshair="0"] button{cursor:auto}
+}
+@media (max-width:560px){
+  .set-foot{flex-direction:column;align-items:stretch;gap:10px}
+  .set-reset{text-align:center}
+}
